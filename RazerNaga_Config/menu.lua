@@ -3,7 +3,6 @@
 --]]
 
 local RazerNaga = LibStub('AceAddon-3.0'):GetAddon('RazerNaga')
-local Anansi = RazerNaga:GetModule('Anansi', true)
 local L = LibStub('AceLocale-3.0'):GetLocale('RazerNaga-Config')
 
 local Menu = RazerNaga:CreateClass('Frame'); RazerNaga.Menu = Menu
@@ -536,36 +535,10 @@ local function BindingModifier_GetSelectedValue(self)
 end
 
 function Panel:NewBindingModifierSelector()
-	local f
+	local f = self:NewRadioGroup(L.BindingSetModifier)
 
-	if Anansi then
-		f = self:NewRadioGroup(L.AnansiTKey)
-
-		f:Add(NONE, 'NONE')
-		for key = 1, Anansi.Config:NumTKeys() do
-			f:Add('T' .. key)
-		end
-
-		f:SetScript('OnShow', function(self)
-			for key = 1, Anansi.Config:NumTKeys() do
-				local button = self.buttons[key + 1]
-				local keyName = Anansi.Config:GetTKeyName(key)
-				local defaultKeyName = 'T' .. key
-				if keyName and keyName ~= defaultKeyName then
-					button:SetText(defaultKeyName .. ' - ' .. keyName)
-				else
-					button:SetText(defaultKeyName)
-				end
-				button:SetValue(Anansi.Config:GetTKeyBinding(key))
-			end
-			self:OnShow()
-		end)
-	else
-		f = self:NewRadioGroup(L.BindingSetModifier)
-
-		for i, modifier in RazerNaga.BindingsLoader:GetAvailableModifiers() do
-			f:Add(RazerNaga.BindingsLoader:GetLocalizedModiferName(modifier), modifier)
-		end
+	for _, modifier in RazerNaga.BindingsLoader:GetAvailableModifiers() do
+		f:Add(RazerNaga.BindingsLoader:GetLocalizedModiferName(modifier), modifier)
 	end
 
 	f.OnSelect = BindingModifier_OnSelect
