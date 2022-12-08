@@ -995,6 +995,7 @@ function Frame:UpdateWatched()
 	end
 end
 
+
 --[[ Highlighting (lynn addition) ]]--
 
 local backdrop = {

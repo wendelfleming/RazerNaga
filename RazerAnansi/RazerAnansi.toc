@@ -2,7 +2,7 @@
 ## Title: Razer Anansi
 ## Notes: Anansi keyboard enhancements to the Razer Naga addon
 ## Author: Tuller
-## Version: 2.8.0
+## Version: 3.0.8
 ## Dependencies: RazerNaga
 anansi.lua
 config.lua
