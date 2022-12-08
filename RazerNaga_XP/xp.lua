@@ -219,45 +219,45 @@ function XP:UpdateReputation()
 	local name, reaction, min, max, value, factionID = GetWatchedFactionInfo()
 	local isCapped
 	
-	local reputationInfo = C_GossipInfo.GetFriendshipReputation(factionID);
-	local friendshipID = reputationInfo.friendshipFactionID;
-	if ( self.factionID ~= factionID ) then
-		self.factionID = factionID;
-		reputationInfo = C_GossipInfo.GetFriendshipReputation(factionID);
+	local reputationInfo = C_GossipInfo.GetFriendshipReputation(factionID)
+	local friendshipID = reputationInfo.friendshipFactionID
+	if self.factionID ~= factionID then
+		self.factionID = factionID
+		reputationInfo = C_GossipInfo.GetFriendshipReputation(factionID)
 		self.friendshipID = reputationInfo.friendshipFactionID
 	end
 
 	-- do something different for friendships
-	local level;
+	local level
 
-	if ( C_Reputation.IsFactionParagon(factionID) ) then
-		local currentValue, threshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID);
-		min, max  = 0, threshold;
-		value = currentValue % threshold;
-		if ( hasRewardPending ) then
-			value = value + threshold;
+	if C_Reputation.IsFactionParagon(factionID) then
+		local currentValue, threshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
+		min, max  = 0, threshold
+		value = currentValue % threshold
+		if hasRewardPending then
+			value = value + threshold
 		end
-		if ( C_Reputation.IsMajorFaction(factionID) ) then
+		if C_Reputation.IsMajorFaction(factionID) then
 		end
-	elseif ( C_Reputation.IsMajorFaction(factionID) ) then
-		local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID);
-		min, max = 0, majorFactionData.renownLevelThreshold;
-	elseif ( friendshipID > 0) then
-		local repInfo = C_GossipInfo.GetFriendshipReputation(factionID);
-		local repRankInfo = C_GossipInfo.GetFriendshipReputationRanks(factionID);
-		level = repRankInfo.currentLevel;
-		if ( repInfo.nextThreshold ) then
-			min, max, value = repInfo.reactionThreshold, repInfo.nextThreshold, repInfo.standing;
+	elseif C_Reputation.IsMajorFaction(factionID) then
+		local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
+		min, max = 0, majorFactionData.renownLevelThreshold
+	elseif friendshipID > 0 then
+		local repInfo = C_GossipInfo.GetFriendshipReputation(factionID)
+		local repRankInfo = C_GossipInfo.GetFriendshipReputationRanks(factionID)
+		level = repRankInfo.currentLevel
+		if repInfo.nextThreshold then
+			min, max, value = repInfo.reactionThreshold, repInfo.nextThreshold, repInfo.standing
 		else
 			-- max rank, make it look like a full bar
-			min, max, value = 0, 1, 1;
-			isCapped = true;
+			min, max, value = 0, 1, 1
+			isCapped = true
 		end
-		local friendshipTextureIndex = 5; -- Friendships always use same texture
+		local friendshipTextureIndex = 5 -- Friendships always use same texture
 	else
-		level = reaction;
-		if ( reaction == MAX_REPUTATION_REACTION ) then
-			isCapped = true;
+		level = reaction
+		if reaction == MAX_REPUTATION_REACTION then
+			isCapped = true
 		end
 	end
 	
