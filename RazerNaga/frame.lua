@@ -368,7 +368,7 @@ function Frame:SetFrameScale(newScale, scaleAnchored)
 	if scaleAnchored then
 		for _, f in self:GetAll() do
 			if f:GetAnchor() == self then
-				f:SetFrameScale(scale, true)
+				f:SetFrameScale(newScale, true)
 			end
 		end
 	end
