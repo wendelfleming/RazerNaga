@@ -3,7 +3,6 @@
 ## Notes: A movable casting bar, with timer
 ## Author: Tuller
 ## Dependencies: RazerNaga
-## DefaultState: disabled
-# localization.lua
-# castBar.xml
+localization.lua
+RazerNagaTimerBarTemplate.xml
 castBar.lua
