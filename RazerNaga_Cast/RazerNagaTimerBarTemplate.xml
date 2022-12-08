@@ -6,7 +6,7 @@
                 <Alpha parentKey="alpha" duration="0" fromAlpha="0" toAlpha="1"/>
             </AnimationGroup>
             <AnimationGroup parentKey="fadeOut" setToFinalAlpha="true">
-                <Alpha parentKey="alpha" duration="0.3" fromAlpha="1" toAlpha="0"/>
+                <Alpha parentKey="alpha" duration="0.5" fromAlpha="1" toAlpha="0"/>
             </AnimationGroup>
         </Animations>
         <Frames>
@@ -33,12 +33,6 @@
             </StatusBar>
         </Frames>
         <Layers>
-            <Layer level="ARTWORK">
-                <Texture parentKey="icon">
-                    <!-- trim the edges of the texture to remove borders -->
-                    <TexCoords top="0.08" left="0.08" bottom="0.92" right="0.92"/>
-                </Texture>
-            </Layer>
             <Layer level="BACKGROUND">
                 <Texture parentKey="background"/>
             </Layer>

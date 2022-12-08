@@ -15,9 +15,9 @@ function TimerBar:OnLoad()
     end
 
     self.border:SetBackdrop{
-        edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+        edgeFile = "Interface\\tooltips\\ui-tooltip-border",
         tileEdge = true,
-        edgeSize = 16,
+        edgeSize = 17,
         insets = {left = 5, right = 5, top = 5, bottom = 5}
     }
 
@@ -78,10 +78,6 @@ function TimerBar:SetFormattedText(format, ...)
     self.statusBar.text:SetFormattedText(format, ...)
 end
 
-function TimerBar:SetIcon(icon)
-    self.icon:SetTexture(icon)
-end
-
 function TimerBar:SetFont(fontID)
     local newFont = SharedMedia:Fetch(SharedMedia.MediaType.FONT, fontID)
     local oldFont, fontSize, fontFlags = self.statusBar.label:GetFont()
@@ -105,13 +101,6 @@ TimerBar.showSpark = false
 
 function TimerBar:SetShowSpark(show)
     self.showSpark = show
-    self:Layout()
-end
-
-TimerBar.showIcon = false
-
-function TimerBar:SetShowIcon(show)
-    self.showIcon = show
     self:Layout()
 end
 
@@ -272,7 +261,7 @@ function TimerBar:Layout()
     self:SetPoint("TOPLEFT", self:GetParent(), "TOPLEFT", self.padding, -self.padding)
     self:SetPoint("BOTTOMRIGHT", self:GetParent(), "BOTTOMRIGHT", -self.padding, self.padding)
 
-    local margin, iconSize
+    local margin
 
     -- show/hide the border
     if self.showBorder then
@@ -288,22 +277,6 @@ function TimerBar:Layout()
     self.background:SetPoint("TOPLEFT", self, "TOPLEFT", margin, -margin)
     self.background:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -margin, margin)
 
-    -- place the icon
-    iconSize = self.showIcon and self.background:GetHeight() or 0
-
-    self.icon:ClearAllPoints()
-    self.icon:SetPoint("TOPLEFT", self.background, "TOPLEFT")
-    self.icon:SetPoint("BOTTOMLEFT", self.background, "BOTTOMLEFT")
-    self.icon:SetPoint("TOPRIGHT", self.background, "TOPLEFT", iconSize, 0)
-    self.icon:SetPoint("BOTTOMRIGHT", self.background, "BOTTOMRIGHT", iconSize, 0)
-
-    -- adjust icon display
-    if self.showIcon then
-        self.icon:Show()
-    else
-        self.icon:Hide()
-    end
-
     -- place the latency bar
     self.latencyBar:ClearAllPoints()
     self.latencyBar:SetPoint("TOPRIGHT", self.background, "TOPRIGHT")
@@ -318,16 +291,15 @@ function TimerBar:Layout()
 
     -- place the statusbar
     self.statusBar:ClearAllPoints()
-    self.statusBar:SetPoint("TOPLEFT", self.background, "TOPLEFT", iconSize, 0)
-    self.statusBar:SetPoint("BOTTOMLEFT", self.background, "BOTTOMLEFT", iconSize, 0)
+    self.statusBar:SetPoint("BOTTOMLEFT", self.background, "BOTTOMLEFT", 0)
     self.statusBar:SetPoint("TOPRIGHT", self.background, "TOPRIGHT", 0, 0)
     self.statusBar:SetPoint("BOTTOMRIGHT", self.background, "BOTTOMRIGHT", 0, 0)
 
     -- place statusbar text
     if self.showLabel and self.showText then
-        self.statusBar.label:SetJustifyH("LEFT")
+        self.statusBar.label:SetJustifyH("CENTER")
         self.statusBar.label:ClearAllPoints()
-        self.statusBar.label:SetPoint("LEFT", 4, 0)
+        self.statusBar.label:SetPoint("CENTER")
         self.statusBar.label:Show()
 
         self.statusBar.text:SetJustifyH("RIGHT")
@@ -354,11 +326,7 @@ function TimerBar:Layout()
     end
 
     -- place statusbar spark
-    if self.showSpark then
-        self.statusBar.spark:Show()
-    else
-        self.statusBar.spark:Hide()
-    end
+    self.statusBar.spark:Show()
 end
 
 -- exports

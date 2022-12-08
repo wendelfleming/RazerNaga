@@ -17,11 +17,6 @@ local UnitChannelInfo = _G.UnitChannelInfo or _G.ChannelInfo
 local IsHarmfulSpell = _G.IsHarmfulSpell
 local IsHelpfulSpell = _G.IsHelpfulSpell
 
-local ICON_OVERRIDES = {
-    -- replace samwise with cog
-    [136235] = 136243
-}
-
 local CAST_BAR_COLORS = {
     default = {1, 0.7, 0},
     failed = {1, 0, 0},
@@ -31,7 +26,7 @@ local CAST_BAR_COLORS = {
     uninterruptible = {0.63, 0.63, 0.63}
 }
 
-local LATENCY_BAR_ALPHA = 0.5
+local LATENCY_BAR_ALPHA = 0
 
 local function GetSpellReaction(spellID)
     local name = GetSpellInfo(spellID)
@@ -78,7 +73,7 @@ end)
 
 CastBar:Extend("OnLoadSettings", function(self)
     if not self.sets.display then
-        self.sets.display = {icon = false, time = true, border = true, latency = true}
+        self.sets.display = {time = true, border = true, latency = true}
     end
 
     self:SetProperty("font", self:GetFontID())
@@ -87,24 +82,12 @@ CastBar:Extend("OnLoadSettings", function(self)
 end)
 
 function CastBar:GetDefaults()
-    return {
-        point = "CENTER",
-        x = 0,
-        y = 30,
-        padW = 1,
-        padH = 1,
-        texture = "blizzard",
-        font = "Friz Quadrata TT",
-
-        useSpellReactionColors = true,
-
-        -- default to the spell queue window for latency padding
-        latencyPadding = tonumber(GetCVar("SpellQueueWindow")),
-
-        displayLayer = 'HIGH',
-
-        display = {icon = false, time = true, border = true, latency = true, spark = true}
-    }
+	return {
+		point = 'CENTER',
+		x = 0,
+		y = 30,
+		showText = true,
+	}
 end
 
 
@@ -264,10 +247,6 @@ function CastBar:label_update(text)
     self.timer:SetLabel(text)
 end
 
-function CastBar:icon_update(texture)
-    self.timer:SetIcon(texture and ICON_OVERRIDES[texture] or texture)
-end
-
 function CastBar:reaction_update(reaction)
     self:UpdateColor()
 end
@@ -314,8 +293,6 @@ function CastBar:Layout()
 
     self.timer:SetPadding(self:GetPadding())
 
-    self.timer:SetShowIcon(self:Displaying("icon"))
-
     self.timer:SetShowText(self:Displaying("time"))
 
     self.timer:SetShowBorder(self:Displaying("border"))
@@ -333,7 +310,6 @@ function CastBar:UpdateChanneling()
     if name then
         self:SetProperty("state", "channeling")
         self:SetProperty("label", name or text)
-        self:SetProperty("icon", texture)
         self:SetProperty("spell", spellID)
         self:SetProperty("uninterruptible", notInterruptible)
 
@@ -358,7 +334,6 @@ function CastBar:UpdateCasting()
     if name then
         self:SetProperty("state", "casting")
         self:SetProperty("label", text)
-        self:SetProperty("icon", texture)
         self:SetProperty("spell", spellID)
         self:SetProperty("uninterruptible", notInterruptible)
 
@@ -386,7 +361,6 @@ function CastBar:UpdateEmpowering()
 
         self:SetProperty("state", "empowering")
         self:SetProperty("label", name or text)
-        self:SetProperty("icon", texture)
         self:SetProperty("spell", spellID)
         self:SetProperty("uninterruptible", notInterruptible)
 
@@ -471,7 +445,7 @@ end
 
 function CastBar:SetupDemo()
     local spellID = self:GetRandomSpellID()
-    local name, rank, icon, castTime = GetSpellInfo(spellID)
+    local name, rank, castTime = GetSpellInfo(spellID)
 
     -- use the spell cast time if we have it, otherwise set a default one
     -- of a few seconds
@@ -483,7 +457,6 @@ function CastBar:SetupDemo()
 
     self:SetProperty("state", "demo")
     self:SetProperty("label", name)
-    self:SetProperty("icon", icon)
     self:SetProperty("spell", spellID)
     self:SetProperty("reaction", GetSpellReaction(spellID))
     self:SetProperty("uninterruptible", nil)
@@ -526,7 +499,7 @@ function CastBar:SetDesiredWidth(width)
 end
 
 function CastBar:GetDesiredWidth()
-    return self.sets.w or 240
+    return self.sets.w or 217
 end
 
 function CastBar:SetDesiredHeight(height)
@@ -535,7 +508,7 @@ function CastBar:SetDesiredHeight(height)
 end
 
 function CastBar:GetDesiredHeight()
-    return self.sets.h or 32
+    return self.sets.h or 27
 end
 
 -- font
