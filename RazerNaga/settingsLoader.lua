@@ -336,7 +336,7 @@ function SettingsLoader:GetThreeByFour()
 				['numButtons'] = 6,
 				['point'] = 'BOTTOM',
 				['spacing'] = -2,
-				['x'] = 235,
+				['x'] = 250,
 				['y'] = 0,
 			},
 			['pet'] = {
@@ -620,7 +620,7 @@ function SettingsLoader:GetFourByThree()
 				['numButtons'] = 6,
 				['point'] = 'BOTTOM',
 				['spacing'] = -2,
-				['x'] = 235,
+				['x'] = 250,
 				['y'] = 0,
 			},
 			['pet'] = {
