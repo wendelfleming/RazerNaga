@@ -182,7 +182,7 @@ function XP:UpdateExperience()
 	self.value:SetMinMaxValues(0, max)
 	self.value:SetValue(value)
 
-	local rest = GetXPExhaustion()
+	local rest = GetXPExhaustion() or 0
 	self.rest:SetMinMaxValues(0, max)
 	
 	if rest then
@@ -385,6 +385,10 @@ local function AddLayoutPanel(menu)
 	local showText = p:NewCheckButton(L.AlwaysShowText)
 	showText:SetScript('OnClick', function(self) self:GetParent().owner:ToggleText(self:GetChecked()) end)
 	showText:SetScript('OnShow', function(self) self:SetChecked(self:GetParent().owner.sets.alwaysShowText) end)
+
+	local showXP = p:NewCheckButton(L.AlwaysShowXP)
+	showXP:SetScript('OnClick', function(self) self:GetParent().owner:SetAlwaysShowXP(self:GetChecked()) end)
+	showXP:SetScript('OnShow', function(self) self:SetChecked(self:GetParent().owner.sets.alwaysShowXP) end)
 end
 
 
