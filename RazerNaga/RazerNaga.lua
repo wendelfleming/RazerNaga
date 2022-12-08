@@ -609,6 +609,8 @@ end
 
 function RazerNaga:SetLock(enable)
 	if InCombatLockdown() then
+		_G.UIErrorsFrame:AddMessage(_G.ERR_NOT_IN_COMBAT)
+		self:Printf(_G.ERR_NOT_IN_COMBAT)
 		return
 	end
 
