@@ -15,10 +15,10 @@ function TimerBar:OnLoad()
     end
 
     self.border:SetBackdrop{
-        edgeFile = "Interface\\tooltips\\ui-tooltip-border",
+        edgeFile = "Interface\\FriendsFrame\\UI-Toast-Border",
         tileEdge = true,
-        edgeSize = 17,
-        insets = {left = 5, right = 5, top = 5, bottom = 5}
+        edgeSize = 10.5,
+        insets = {left = 0, right = 0, top = 0, bottom = 0}
     }
 
     self.Layout = RazerNaga:Defer(TimerBar.Layout, 0.1, self)
