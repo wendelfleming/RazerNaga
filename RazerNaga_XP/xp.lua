@@ -155,10 +155,11 @@ function XP:WatchExperience()
 	if not self.sets.alwaysShowXP then
 		self:RegisterEvent('UPDATE_FACTION')
 	end
-	self:RegisterEvent('UPDATE_EXHAUSTION')
+	self:RegisterEvent('PLAYER_ENTERING_WORLD')
 	self:RegisterEvent('PLAYER_XP_UPDATE')
+	self:RegisterEvent('UPDATE_EXHAUSTION')
 	self:RegisterEvent('PLAYER_LEVEL_UP')
-	self:RegisterEvent('PLAYER_LOGIN')
+	self:RegisterEvent('PLAYER_UPDATE_RESTING')
 
 	self.rest:SetStatusBarColor(0.25, 0.25, 1)
 	self.value:SetStatusBarColor(0.6, 0, 0.6)
@@ -182,7 +183,7 @@ function XP:UpdateExperience()
 	self.value:SetMinMaxValues(0, max)
 	self.value:SetValue(value)
 
-	local rest = GetXPExhaustion() or 0
+	local rest = GetXPExhaustion()
 	self.rest:SetMinMaxValues(0, max)
 	
 	if rest then
@@ -266,6 +267,7 @@ function XP:UpdateReputation()
 		max = 1000
 		value = 999
 	end
+	min = 0
 
 	local color = FACTION_BAR_COLORS[reaction]
 	self.value:SetStatusBarColor(color.r, color.g, color.b)
@@ -385,10 +387,6 @@ local function AddLayoutPanel(menu)
 	local showText = p:NewCheckButton(L.AlwaysShowText)
 	showText:SetScript('OnClick', function(self) self:GetParent().owner:ToggleText(self:GetChecked()) end)
 	showText:SetScript('OnShow', function(self) self:SetChecked(self:GetParent().owner.sets.alwaysShowText) end)
-
-	local showXP = p:NewCheckButton(L.AlwaysShowXP)
-	showXP:SetScript('OnClick', function(self) self:GetParent().owner:SetAlwaysShowXP(self:GetChecked()) end)
-	showXP:SetScript('OnShow', function(self) self:SetChecked(self:GetParent().owner.sets.alwaysShowXP) end)
 end
 
 
