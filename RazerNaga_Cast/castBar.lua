@@ -3,6 +3,9 @@
 		A dominos based casting bar
 --]]
 
+DisableAddOn(..., true)
+
+--[[
 local DCB = RazerNaga:NewModule('CastingBar')
 local L = LibStub('AceLocale-3.0'):GetLocale('RazerNaga')
 local CastBar, CastingBar
@@ -15,8 +18,6 @@ function DCB:Unload()
 	self.frame:Free()
 end
 
-
---[[ RazerNaga Frame Object ]]--
 
 CastBar = RazerNaga:CreateClass('Frame', RazerNaga.Frame)
 
@@ -82,9 +83,6 @@ function CastBar:Layout()
 	self:SetWidth(max(self.cast:GetWidth() + 4 + self:GetPadding()*2, 8))
 	self:SetHeight(max(24 + self:GetPadding()*2, 8))
 end
-
-
---[[ CastingBar Object ]]--
 
 CastingBar = RazerNaga:CreateClass('StatusBar')
 
@@ -164,3 +162,4 @@ end
 --hide the old casting bar
 CastingBarFrame:UnregisterAllEvents()
 CastingBarFrame:Hide()
+--]]

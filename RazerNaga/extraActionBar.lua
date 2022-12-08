@@ -1,54 +1,54 @@
-local ExtraAbilityContainer = _G.ExtraAbilityContainer
-if not ExtraAbilityContainer then
-    return
-end
+if not ExtraAbilityContainer then return end
 
-local RazerNaga = _G.RazerNaga
+--[[
+	actionBar.lua
+		A pool of action bars
+--]]
+
+--[[ globals ]]--
+
+local RazerNaga = _G[...]
+local L = LibStub("AceLocale-3.0"):GetLocale('RazerNaga')
 
 --[[ bar ]]--
 
-local ExtraBar = RazerNaga:CreateClass('Frame', RazerNaga.Frame)
+local ExtraAbilityBar = RazerNaga:CreateClass('Frame', RazerNaga.Frame)
 
-function ExtraBar:New()
-	local frame = RazerNaga.Frame.New(self, 'extra')
-
-	-- attach the ExtraAbilityContainer to the bar
-	local container = ExtraAbilityContainer
-
-	container:ClearAllPoints()
-	container:SetPoint('CENTER', frame.header)
-	container:SetParent(frame.header)
-	container:SetToplevel(false)
-
-	frame.container = container
-
-	-- drop need for showstates for this case, as the extra bar can show in more
-	-- conditions with shadowlands
-    if frame:GetShowStates() == '[extrabar]show;hide' then
-        frame:SetShowStates(nil)
-    end
-
-	frame:Layout()
-
-	return frame
+function ExtraAbilityBar:New()
+    return ExtraAbilityBar.proto.New(self, 'extra')
 end
 
-function ExtraBar:GetDefaults()
-	return {
-		point = 'CENTER',
-		x = -244,
-		y = 0,
-	}
+ExtraAbilityBar:Extend('OnAcquire',  function(self)
+    self:RepositionExtraAbilityContainer()
+    self:Layout()
+end)
+
+function ExtraAbilityBar:GetDefaults()
+    return {
+        point = 'BOTTOM',
+        x = 0,
+        y = 160,
+        showInPetBattleUI = true,
+        showInOverrideUI = true
+    }
 end
 
-function ExtraBar:Layout()
+function ExtraAbilityBar:Layout()
     local w, h = 256, 120
     local pW, pH = self:GetPadding()
 
     self:SetSize(w + pW, h + pH)
 end
 
-function ExtraBar:CreateMenu()
+function ExtraAbilityBar:RepositionExtraAbilityContainer()
+    local container = ExtraAbilityContainer
+
+    container:SetParent(self)
+    container:ClearAllPointsBase()
+    container:SetPointBase('CENTER', self)
+end
+
+function ExtraAbilityBar:CreateMenu()
 	local menu = RazerNaga:NewMenu(self.id)
 
 	self:AddLayoutPanel(menu)
@@ -58,7 +58,7 @@ function ExtraBar:CreateMenu()
 	return menu
 end
 
-function ExtraBar:AddLayoutPanel(menu)
+function ExtraAbilityBar:AddLayoutPanel(menu)
 	local panel = menu:NewPanel(LibStub('AceLocale-3.0'):GetLocale('RazerNaga-Config').Layout)
 
 	panel.opacitySlider = panel:NewOpacitySlider()
@@ -69,39 +69,55 @@ function ExtraBar:AddLayoutPanel(menu)
 	return panel
 end
 
-
 --[[ module ]]--
 
-local ExtraBarController = RazerNaga:NewModule('ExtraBar')
+local ExtraAbilityBarModule = RazerNaga:NewModule('ExtraAbilityBar')
 
-function ExtraBarController:OnInitialize()
-	-- disable mouse interactions on the extra action bar
-	-- as it can sometimes block the UI from being interactive
-	if ExtraActionBarFrame:IsMouseEnabled() then
-		ExtraActionBarFrame:EnableMouse(false)
-	end
+function ExtraAbilityBarModule:Load()
+    if not self.loaded then
+        self:OnFirstLoad()
+        self.loaded = true
+    end
 
-	-- prevent the stock UI from messing with the extra ability bar position
-	ExtraActionBarFrame.ignoreFramePositionManager = true
-	ExtraAbilityContainer.ignoreFramePositionManager = true
-
-	-- onshow/hide call UpdateManagedFramePositions on the blizzard end so
-	-- turn that bit off
-	ExtraAbilityContainer:SetScript("OnShow", nil)
-	ExtraAbilityContainer:SetScript("OnHide", nil)
+    self.frame = ExtraAbilityBar:New()
 end
 
-function ExtraBarController:OnEnable()
-	self:ApplyTitanPanelWorkarounds()
+function ExtraAbilityBarModule:Unload()
+    if self.frame then
+        self.frame:Free()
+    end
 end
 
-function ExtraBarController:Load()
-    self.frame = ExtraBar:New()
+function ExtraAbilityBarModule:OnFirstLoad()
+    self:ApplyTitanPanelWorkarounds()
+
+    -- disable mouse interactions on the extra action bar
+    -- as it can sometimes block the UI from being interactive
+    if ExtraActionBarFrame:IsMouseEnabled() then
+        ExtraActionBarFrame:EnableMouse(false)
+    end
+
+    -- onshow/hide call UpdateManagedFramePositions on the blizzard end so
+    -- turn that bit off
+    ExtraAbilityContainer:SetScript("OnShow", nil)
+    ExtraAbilityContainer:SetScript("OnHide", nil)
+
+    -- also reposition whenever edit mode tries to do so
+    hooksecurefunc(ExtraAbilityContainer, 'ApplySystemAnchor', function()
+        self:RepositionExtraAbilityContainer()
+    end)
 end
 
-function ExtraBarController:Unload()
-	self.frame:Free()
+function ExtraAbilityBarModule:RepositionExtraAbilityContainer()
+    if (not self.frame) then return end
+
+    local _, relFrame = ExtraAbilityContainer:GetPoint()
+
+    if self.frame ~= relFrame then
+        self.frame:RepositionExtraAbilityContainer()
+    end
 end
+
 
 -- Titan panel will attempt to take control of the ExtraActionBarFrame and break
 -- its position and ability to be usable. This is because Titan Panel doesn't
@@ -109,7 +125,7 @@ end
 --
 -- To resolve this, we call TitanMovable_AddonAdjust() for the extra ability bar
 -- frames to let titan panel know we are handling positions for the extra bar
-function ExtraBarController:ApplyTitanPanelWorkarounds()
+function ExtraAbilityBarModule:ApplyTitanPanelWorkarounds()
     local adjust = _G.TitanMovable_AddonAdjust
     if not adjust then return end
 

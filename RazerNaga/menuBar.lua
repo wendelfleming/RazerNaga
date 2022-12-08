@@ -1,6 +1,9 @@
 --[[
-	MenuBar
+	menuBar.lua
+		A movable bar for the micro menu buttons
 --]]
+
+--[[ globals ]]--
 
 local MenuBar = RazerNaga:CreateClass('Frame', RazerNaga.Frame)
 RazerNaga.MenuBar = MenuBar
@@ -39,7 +42,7 @@ local MICRO_BUTTON_NAMES = {
 --[[ Menu Bar ]] --
 
 function MenuBar:New()
-    local bar = MenuBar.super.New(self, 'menu')
+    local bar = MenuBar.proto.New(self, 'menu')
 
     bar:LoadButtons()
     bar:Layout()
@@ -48,7 +51,7 @@ function MenuBar:New()
 end
 
 function MenuBar:Create(frameId)
-    local bar = MenuBar.super.Create(self, frameId)
+    local bar = MenuBar.proto.Create(self, frameId)
 
     bar.buttons = {}
 	bar.activeButtons = {}
@@ -126,7 +129,7 @@ function MenuBar:AddButton(i)
     local button = _G[buttonName]
 
     if button then
-        button:SetParent(self.header)
+        button:SetParent(self)
         button:Show()
 
         self.buttons[i] = button
@@ -145,7 +148,7 @@ function MenuBar:RemoveButton(i)
 end
 
 function MenuBar:LoadSettings(...)
-    MenuBar.super.LoadSettings(self, ...)
+    MenuBar.proto.LoadSettings(self, ...)
 
     self.activeButtons = {}
 end
@@ -229,7 +232,7 @@ function MenuBar:LayoutNormal()
             row = rows - ceil(i / cols)
         end
 
-        button:SetParent(self.header)
+        button:SetParent(self)
         button:ClearAllPoints()
         button:SetPoint('TOPLEFT', w * col + pW - l, -(h * row + pH) + r)
         button:Show()

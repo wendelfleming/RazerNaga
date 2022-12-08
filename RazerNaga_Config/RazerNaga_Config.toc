@@ -1,4 +1,4 @@
-## Interface: 90002
+## Interface: 100002
 ## Title: Razer Naga Config
 ## Notes: GUI based configuration for Razer Naga
 ## Author: Tuller
@@ -10,4 +10,5 @@ dropdown.lua
 menu.lua
 panel.lua
 general.lua
+anansi.lua
 profiles.lua

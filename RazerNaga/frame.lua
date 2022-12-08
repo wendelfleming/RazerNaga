@@ -4,9 +4,8 @@
 --]]
 
 local Frame = RazerNaga:CreateClass('Frame')
-RazerNaga.Frame = Frame
+local FlyPaper = LibStub("LibFlyPaper-1.0")
 
-local FadeManager = RazerNaga.FadeManager
 local active = {}
 local unused = {}
 
@@ -18,57 +17,69 @@ function Frame:New(id, tooltipText)
 	f:LoadSettings()
 	f.buttons = {}
 	f:SetTooltipText(tooltipText)
-	RazerNaga.OverrideController:Add(f.header)
+	
+	if RazerNaga.OverrideController then
+        RazerNaga.OverrideController:Add(f)
+    end
+	
+	f:OnAcquire(id)
 
 	active[id] = f
 	return f
 end
 
 function Frame:Create(id)
-	local f = self:Bind(CreateFrame('Frame', format('RazerNagaFrame%s', id), UIParent))
+	local f = self:Bind(CreateFrame('Frame', format('RazerNagaFrame%s', id), UIParent, 'SecureHandlerStateTemplate'))
+
 	f:SetClampedToScreen(true)
 	f:SetMovable(true)
 	f.id = id
 
+	f:SetAttribute('id', id)
 
-	f.header = CreateFrame('Frame', nil, f, 'SecureHandlerStateTemplate')
-
-	f.header:SetAttribute('id', id)
-
-	f.header:SetAttribute('_onstate-overrideui', [[
-		self:RunAttribute('updateShown')
+	f:SetAttribute('_onstate-alpha', [[
+		self:CallMethod('Fade')
+	]])
+	
+	f:SetAttribute('_onstate-overrideui', [[
+		self:RunAttribute('UpdateShown')
 	]])
 
-	f.header:SetAttribute('_onstate-showinoverrideui', [[
-		self:RunAttribute('updateShown')
+	f:SetAttribute('_onstate-showinoverrideui', [[
+		self:RunAttribute('UpdateShown')
 	]])
 
-	f.header:SetAttribute('_onstate-petbattleui', [[
-		self:RunAttribute('updateShown')
+	f:SetAttribute('_onstate-petbattleui', [[
+		self:RunAttribute('UpdateShown')
 	]])
 
-	f.header:SetAttribute('_onstate-showinpetbattleui', [[
-		self:RunAttribute('updateShown')
+	f:SetAttribute('_onstate-showinpetbattleui', [[
+		self:RunAttribute('UpdateShown')
 	]])
 
-	f.header:SetAttribute('_onstate-display', [[
-		self:RunAttribute('updateShown')
+	f:SetAttribute('_onstate-display', [[
+		self:RunAttribute('UpdateShown')
 	]])
 
-	f.header:SetAttribute('updateShown', [[
+	f:SetAttribute("_onstate-hidden", [[
+		self:RunAttribute("UpdateShown")
+	]])
+
+	f:SetAttribute('UpdateShown', [[
+		if self:GetAttribute('state-hidden') then
+			self:Hide()
+			return
+		end
 		local isOverrideUIShown = self:GetAttribute('state-overrideui') and true or false
 		local isPetBattleUIShown = self:GetAttribute('state-petbattleui') and true or false
-
 		if isPetBattleUIShown and not self:GetAttribute('state-showinpetbattleui') then
 			self:Hide()
 			return
 		end
-
 		if isOverrideUIShown and not self:GetAttribute('state-showinoverrideui') then
 			self:Hide()
 			return
 		end
-
 		local displayState = self:GetAttribute('state-display')
 		if displayState == 'hide' then
 			if self:GetAttribute('state-alpha') then
@@ -77,7 +88,6 @@ function Frame:Create(id)
 			self:Hide()
 			return
 		end
-
 		local stateAlpha = tonumber(displayState)
 		if self:GetAttribute('state-alpha') ~= stateAlpha then
 			self:SetAttribute('state-alpha', stateAlpha)
@@ -85,15 +95,9 @@ function Frame:Create(id)
 		self:Show()
 	]])
 
-	f.header:SetAttribute('_onstate-alpha', [[
-		self:CallMethod('Fade')
-	]])
-
-	f.header.Fade = function() f:Fade() end
-
-	f.header:SetAllPoints(f)
-
 	f.drag = RazerNaga.DragFrame:New(f)
+	
+	f:OnCreate(id)
 
 	return f
 end
@@ -102,28 +106,30 @@ function Frame:Restore(id)
 	local f = unused[id]
 	if f then
 		unused[id] = nil
+		f:OnRestore(id)
 		return f
 	end
 end
 
 --destructor
-function Frame:Free()
+function Frame:Free(deleteSettings)
 	active[self.id] = nil
 
-	UnregisterStateDriver(self.header, 'display', 'show')
+	UnregisterStateDriver(self, 'display', 'show')
 	RazerNaga.MouseOverWatcher:Remove(self)
-	RazerNaga.OverrideController:Remove(self.header)
+	
+	if RazerNaga.OverrideController then
+        RazerNaga.OverrideController:Remove(self)
+    end
 
-	for i in pairs(self.buttons) do
-		self:RemoveButton(i)
-	end
-	self.buttons = nil
 	self.docked = nil
 
 	self:ClearAllPoints()
-	self:SetUserPlaced(nil)
+	self:SetUserPlaced(false)
 	self.drag:Hide()
 	self:Hide()
+	
+	self:OnRelease(self.id, deleteSettings)
 
 	unused[self.id] = self
 end
@@ -132,6 +138,37 @@ function Frame:Delete()
 	self:Free()
 	RazerNaga:SetFrameSets(self.id, nil)
 end
+
+--[[ New API ]]--
+
+-- called when a frame is acquired from the pool
+function Frame:OnAcquire(id)
+    if self.OnEnable then
+        RazerNaga:Printf('Bar %q called deprecated method OnEnable', id)
+        self:OnEnable()
+    end
+end
+
+-- called when a frame is first created
+function Frame:OnCreate(id)
+end
+
+-- called when a frame is pulled in from the inactive pool
+function Frame:OnRestore(id)
+end
+
+-- called when a frame is sent to the inactive pool
+function Frame:OnRelease(id, deleteSettings)
+    if self.OnFree then
+        RazerNaga:Printf('Bar %q called deprecated method OnFree', id)
+        self:OnFree()
+    end
+end
+
+function Frame:OnLoadSettings()
+end
+
+--[[ Initialization ]]--
 
 function Frame:LoadSettings(defaults)
 	self.sets = RazerNaga:GetFrameSets(self.id) or RazerNaga:SetFrameSets(self.id, self:GetDefaults()) --get defaults must be provided by anything implementing the Frame type
@@ -153,6 +190,8 @@ function Frame:LoadSettings(defaults)
 
 	self:ShowInOverrideUI(self:ShowingInOverrideUI())
 	self:ShowInPetBattleUI(self:ShowingInPetBattleUI())
+	
+	self:OnLoadSettings()
 end
 
 --[[ Layout ]]--
@@ -301,6 +340,14 @@ function Frame:Layout()
 	self:SetSize(max(width, 8), max(height, 8))
 end
 
+function Frame:TrySetSize(width, height)
+    if not _G.InCombatLockdown() then
+        self:SetSize(width, height)
+        return true
+    end
+
+    return false
+end
 
 --[[ Scaling ]]--
 
@@ -321,7 +368,7 @@ function Frame:SetFrameScale(newScale, scaleAnchored)
 	if scaleAnchored then
 		for _, f in self:GetAll() do
 			if f:GetAnchor() == self then
-				f:SetFrameScale(newScale, true)
+				f:SetFrameScale(scale, true)
 			end
 		end
 	end
@@ -350,7 +397,7 @@ end
 
 function Frame:SetFrameAlpha(alpha)
 	if alpha == 1 then
-		self.sets.alpha = false
+		self.sets.alpha = nil
 	else
 		self.sets.alpha = alpha
 	end
@@ -367,7 +414,7 @@ function Frame:SetFadeMultiplier(alpha)
 	local alpha = alpha or 1
 
 	if alpha == 1 then
-		self.sets.fadeAlpha = false
+		self.sets.fadeAlpha = nil
 	else
 		self.sets.fadeAlpha = alpha
 	end
@@ -404,8 +451,16 @@ function Frame:GetExpectedAlpha()
 		return self:GetFrameAlpha()
 	end
 
+	--if the frame is a tKey and the given tKey is presed then return the frame's normal opacity
+	local Anansi = RazerNaga:GetModule('Anansi', true)
+	if Anansi and Anansi.Config:AutoFadingTBars() and RazerNaga.BindingsLoader:IsAutoBindingEnabled(self) then
+		if Anansi:IsTKeyPressed(Anansi:GetFrameTKey(self)) then
+			return self:GetFrameAlpha()
+		end
+	end
+
 	--if there's a statealpha value for the frame, then use it
-	local stateAlpha = self.header:GetAttribute('state-alpha')
+	local stateAlpha = self:GetAttribute('state-alpha')
 	if stateAlpha then
 		return stateAlpha / 100
 	end
@@ -525,8 +580,9 @@ end
 --[[ Visibility ]]--
 
 function Frame:ShowFrame()
-	self.sets.hidden = false
-	self:Show()
+	self.sets.hidden = nil
+	
+	self:SetAttribute('state-hidden', nil)
 	self.drag:UpdateColor()
 	self:UpdateWatched()
 	self:UpdateAlpha()
@@ -538,7 +594,8 @@ end
 
 function Frame:HideFrame()
 	self.sets.hidden = true
-	self:Hide()
+	
+	self:SetAttribute('state-hidden', true)
 	self.drag:UpdateColor()
 	self:UpdateWatched()
 	self:UpdateAlpha()
@@ -565,7 +622,7 @@ end
 
 function Frame:ShowInOverrideUI(enable)
 	self.sets.showInOverrideUI = enable and true or false
-	self.header:SetAttribute('state-showinoverrideui', enable)
+	self:SetAttribute('state-showinoverrideui', enable)
 end
 
 function Frame:ShowingInOverrideUI()
@@ -574,7 +631,7 @@ end
 
 function Frame:ShowInPetBattleUI(enable)
 	self.sets.showInPetBattleUI = enable and true or false
-	self.header:SetAttribute('state-showinpetbattleui', enable)
+	self:SetAttribute('state-showinpetbattleui', enable)
 end
 
 function Frame:ShowingInPetBattleUI()
@@ -633,12 +690,12 @@ function Frame:UpdateShowStates()
 	local showstates = self:GetShowStates()
 
 	if showstates then
-		RegisterStateDriver(self.header, 'display', showstates)
+		RegisterStateDriver(self, 'display', showstates)
 	else
-		UnregisterStateDriver(self.header, 'display')
+		UnregisterStateDriver(self, 'display')
 
-		if self.header:GetAttribute('state-display') then
-			self.header:SetAttribute('state-display', nil)
+		if self:GetAttribute('state-display') then
+			self:SetAttribute('state-display', nil)
 		end
 	end
 end
@@ -718,7 +775,6 @@ function Frame:Stick()
 	end
 
 	self:SaveRelativeFramePosition()
-	self.drag:UpdateColor()
 end
 
 function Frame:Reanchor()
@@ -730,8 +786,6 @@ function Frame:Reanchor()
 	else
 		self:SetAnchor(f, point)
 	end
-
-	self.drag:UpdateColor()
 end
 
 function Frame:SetAnchor(anchor, point)
@@ -964,10 +1018,10 @@ local backdrop = {
 }
 
 local function createBorder(self)
-	local f = CreateFrame('Frame', nil, self.header, BackdropTemplateMixin and 'BackdropTemplate')
+	local f = CreateFrame('Frame', nil, self, BackdropTemplateMixin and 'BackdropTemplate')
 	f:SetToplevel(true)
-	f:SetPoint('TOPLEFT', -4, 4, self.header)
-	f:SetPoint('BOTTOMRIGHT', 4, -4, self.header)
+	f:SetPoint('TOPLEFT', -4, 4, self)
+	f:SetPoint('BOTTOMRIGHT', 4, -4, self)
 	f:SetBackdrop(backdrop)
 	f:SetBackdropBorderColor(1, 0.8, 0, 1)
 	f:Hide()
@@ -975,14 +1029,111 @@ local function createBorder(self)
 	return f
 end
 
-function Frame:ShowHighlight()
-	local ht = self.ht
-	if not ht then
-		ht = createBorder(self)
-		self.ht = ht
-	end
+--[[ anansi specific border ]]--
 
+local function createAnansiBorder(self)
+	local BORDER_SIZE = 32
+	local OFFSET = 12
+
+	local f = CreateFrame('Frame', nil, self)
+	f:SetPoint('TOPLEFT', -OFFSET, OFFSET, self)
+	f:SetPoint('BOTTOMRIGHT', OFFSET, -OFFSET, self)
+
+
+	local tl = f:CreateTexture(nil, 'BACKGROUND')
+	tl:SetSize(BORDER_SIZE, BORDER_SIZE)
+	tl:SetPoint('TOPLEFT')
+	f.tl = tl
+
+	local tr = f:CreateTexture(nil, 'BACKGROUND')
+	tr:SetSize(BORDER_SIZE, BORDER_SIZE)
+	tr:SetPoint('TOPRIGHT')
+	f.tr = tr
+
+	local t = f:CreateTexture(nil, 'BACKGROUND')
+	t:SetPoint('LEFT', tl, 'RIGHT', 0, 1)
+	t:SetPoint('RIGHT', tr, 'LEFT', 0, 1)
+	t:SetHeight(BORDER_SIZE)
+	t:SetHorizTile(true)
+	f.t = t
+
+	local bl = f:CreateTexture(nil, 'BACKGROUND')
+	bl:SetSize(BORDER_SIZE, BORDER_SIZE)
+	bl:SetPoint('BOTTOMLEFT')
+	f.bl = bl
+
+	local br = f:CreateTexture(nil, 'BACKGROUND')
+	br:SetSize(BORDER_SIZE, BORDER_SIZE)
+	br:SetPoint('BOTTOMRIGHT')
+	f.br = br
+
+	local b = f:CreateTexture(nil, 'BACKGROUND')
+	b:SetPoint('LEFT', bl, 'RIGHT', 0, 0)
+	b:SetPoint('RIGHT', br, 'LEFT', 0, 0)
+	b:SetHeight(BORDER_SIZE)
+	b:SetHorizTile(true)
+	f.b = b
+
+	local l = f:CreateTexture(nil, 'BACKGROUND')
+	l:SetPoint('TOP', tl, 'BOTTOM', -4, 0)
+	l:SetPoint('BOTTOM', bl, 'TOP', -4, 0)
+	l:SetWidth(BORDER_SIZE)
+	l:SetVertTile(true)
+	f.l = l
+
+	local r = f:CreateTexture(nil, 'BACKGROUND')
+	r:SetPoint('TOP', tr, 'BOTTOM', 4, 0)
+	r:SetPoint('BOTTOM', br, 'TOP', 4, 0)
+	r:SetWidth(BORDER_SIZE)
+	r:SetVertTile(true)
+	f.r = r
+
+	local m = f:CreateTexture(nil, 'BACKGROUND')
+	m:SetPoint('TOP', t, 'BOTTOM')
+	m:SetPoint('BOTTOM', b, 'TOP')
+	m:SetPoint('LEFT', l, 'RIGHT', 0, 0)
+	m:SetPoint('RIGHT', r, 'LEFT', 0, 0)
+	m:SetHorizTile(true)
+	m:SetVertTile(true)
+	f.m = m
+
+	return f
+end
+
+function Frame:ShowHighlight()
+	if not self:ShowAnansiHighlight() then
+		local ht = self.ht
+		if not ht then
+			ht = createBorder(self)
+			self.ht = ht
+		end
+	end
 	self.ht:Show()
+end
+
+function Frame:ShowAnansiHighlight()
+	local Anansi = RazerNaga:GetModule('Anansi', true)
+	if not Anansi then return false end
+
+	local tKey = Anansi:GetFrameTKey(self)
+	if tKey then
+		local ht = self.ht
+		if not ht then
+			ht = createAnansiBorder(self)
+			self.ht = ht
+		end
+
+		ht.tl:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_topleft]]):format(tKey))
+		ht.tr:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_topright]]):format(tKey))
+		ht.t:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_top]]):format(tKey))
+		ht.bl:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_bottomleft]]):format(tKey))
+		ht.br:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_bottomright]]):format(tKey))
+		ht.b:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_bottom]]):format(tKey))
+		ht.l:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_left]]):format(tKey))
+		ht.r:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_right]]):format(tKey))
+		ht.m:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_centre]]):format(tKey))
+	end
+	return true
 end
 
 function Frame:HideHighlight()
@@ -1000,6 +1151,16 @@ end
 
 function Frame:GetAll()
 	return pairs(active)
+end
+
+function Frame:CallMethod(method, ...)
+    local func = self[method]
+
+    if type(func) == 'function' then
+        return func(self, ...)
+    else
+        error(('Frame %s does not have a method named %q'):format(self.id, method), 2)
+    end
 end
 
 function Frame:ForAll(method, ...)
@@ -1059,3 +1220,7 @@ function Frame:ForFrame(id, method, ...)
 		end
 	end
 end
+
+--[[ exports ]]--
+
+RazerNaga.Frame = Frame

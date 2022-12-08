@@ -93,8 +93,6 @@ function BindingsLoader:AssignBindingsToFrame(frame, bindings, modifier)
 		if modifier and modifier ~= '' and modifier ~= 'NONE' then
 			key = modifier .. '-' .. key
 		end
-
-		frame:GetButton(i):SetAutoBinding(key)
 	end
 end
 

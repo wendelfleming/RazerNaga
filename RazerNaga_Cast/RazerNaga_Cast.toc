@@ -1,7 +1,9 @@
-﻿## Interface: 90002
+﻿## Interface: 100002
 ## Title: Razer Naga Cast
 ## Notes: A movable casting bar, with timer
 ## Author: Tuller
 ## Dependencies: RazerNaga
-localization.lua
-castBar.xml
+## DefaultState: disabled
+# localization.lua
+# castBar.xml
+castBar.lua
