@@ -21,7 +21,7 @@
                 </Layers>
                 <Frames>
                     <StatusBar parentKey="spark" setAllPoints="true">
-                        <BarTexture horizTile="true" alphaMode="BLEND">
+                        <BarTexture horizTile="true" alphaMode="ADD">
                             <Color r="1" g="1" b="1" a="0.5"/>
                             <Gradient orientation="HORIZONTAL">
                                 <MinColor r="0" g="0" b="0" a="0"/>
