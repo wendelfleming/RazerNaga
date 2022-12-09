@@ -21,7 +21,7 @@ local IsHelpfulSpell = _G.IsHelpfulSpell
 
 local CAST_BAR_COLORS = {
     default = {1, 0.7, 0},
-    failed = {1, 0, 0},
+    failed = {0.86, 0.08, 0.24},
     harm = {0.63, 0.36, 0.94},
     help = {0.31, 0.78, 0.47},
     spell = {0.63, 0.36, 0.94},
