@@ -15,8 +15,8 @@
             <StatusBar parentKey="statusBar">
                 <Layers>
                     <Layer level="OVERLAY">
-                        <FontString parentKey="text" inherits="GameFontHighlightSmall" justifyH="RIGHT"/>
-                        <FontString parentKey="label" inherits="GameFontHighlightSmall" justifyH="LEFT"/>
+                        <FontString parentKey="text" inherits="GameFontHighlight" justifyH="RIGHT"/>
+                        <FontString parentKey="label" inherits="GameFontHighlight" justifyH="LEFT"/>
                     </Layer>
                 </Layers>
                 <Frames>
