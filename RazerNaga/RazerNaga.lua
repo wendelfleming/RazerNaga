@@ -474,6 +474,7 @@ function RazerNaga:ShowOptions()
 
 	if LoadAddOn('RazerNaga_Config') then
 		InterfaceOptionsFrame_OpenToCategory(self.Options)
+		InterfaceOptionsFrame_OpenToCategory(self.Options)
 		return true
 	end
 	return false
