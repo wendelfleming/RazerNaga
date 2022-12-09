@@ -32,7 +32,7 @@
 				</Layer>
                     <Layer level="OVERLAY">
                         <FontString parentKey="text" inherits="GameFontHighlight" justifyH="RIGHT"/>
-                        <FontString parentKey="label" inherits="GameFontHighlight" justifyH="LEFT"/>
+                        <FontString parentKey="label" inherits="GameFontHighlight" justifyH="CENTER"/>
                     </Layer>
                 </Layers>
                 <Frames>
