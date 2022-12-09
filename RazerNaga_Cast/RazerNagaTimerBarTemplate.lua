@@ -302,12 +302,12 @@ function TimerBar:Layout()
     if self.showLabel and self.showText then
         self.statusBar.label:SetJustifyH("CENTER")
         self.statusBar.label:ClearAllPoints()
-        self.statusBar.label:SetPoint("CENTER")
+        self.statusBar.label:SetPoint("CENTER", 0, 0.4)
         self.statusBar.label:Show()
 
         self.statusBar.text:SetJustifyH("RIGHT")
         self.statusBar.text:ClearAllPoints()
-        self.statusBar.text:SetPoint("RIGHT", -2, 0)
+        self.statusBar.text:SetPoint("RIGHT", -2, 0.4)
         self.statusBar.text:Show()
     elseif self.showLabel then
         self.statusBar.label:SetJustifyH("CENTER")
