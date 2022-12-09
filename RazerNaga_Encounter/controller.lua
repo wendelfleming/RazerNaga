@@ -1,5 +1,15 @@
+--[[
+	controller.lua
+		the controller for the RazerNaga encounter bar
+--]]
+
+--[[ globals ]]--
+
 local AddonName, Addon = ...
 local EncounterBarModule = RazerNaga:NewModule('EncounterBar', 'AceEvent-3.0')
+
+
+--[[ controller ]]--
 
 function EncounterBarModule:Load()
 	if not self.loaded then

@@ -3,6 +3,8 @@
 		A dominos based casting bar
 --]]
 
+--[[ globals ]]--
+
 local _, Addon = ...
 local RazerNaga = LibStub("AceAddon-3.0"):GetAddon("RazerNaga")
 local L = LibStub("AceLocale-3.0"):GetLocale("RazerNaga")
@@ -90,6 +92,7 @@ function CastBar:GetDefaults()
 		padW = 1,
         padH = 1,
 		useSpellReactionColors = true,
+		displayLayer = 'HIGH',
 		display = {
 			time = true, 
 			border = true, 
@@ -277,6 +280,7 @@ end
 function CastBar:texture_update(textureID)
     self.timer:SetTexture(textureID)
 end
+
 
 --[[ CastingBar Methods ]]--
 
@@ -633,5 +637,6 @@ function CastBarModule:Unload()
     end
 end
 
--- exports
+--[[ exports ]]--
+
 Addon.CastBar = CastBar

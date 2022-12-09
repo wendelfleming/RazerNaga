@@ -3,6 +3,8 @@
 		A RazerNaga frame component that controls frame movement
 --]]
 
+--[[ globals ]]--
+
 local Drag = RazerNaga:CreateClass('Button')
 RazerNaga.DragFrame = Drag
 

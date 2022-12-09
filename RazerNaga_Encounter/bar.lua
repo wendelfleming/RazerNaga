@@ -1,7 +1,17 @@
 ﻿if not PlayerPowerBarAlt then return end
 
+--[[
+	bar.lua
+		The RazerNaga encounter bar
+--]]
+
+--[[ globals ]]--
+
 local AddonName, Addon = ...
 local L = LibStub('AceLocale-3.0'):GetLocale('RazerNaga')
+
+
+--[[ bar ]]--
 
 local EncounterBar = RazerNaga:CreateClass('Frame', RazerNaga.Frame)
 

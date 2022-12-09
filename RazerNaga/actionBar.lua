@@ -6,7 +6,6 @@
 --[[ globals ]]--
 
 local RazerNaga = _G[...]
-
 local L = LibStub('AceLocale-3.0'):GetLocale('RazerNaga')
 
 local ACTION_BUTTON_COUNT = 120
@@ -91,7 +90,8 @@ function ActionBar:GetDefaults()
         padW = 2,
         padH = 2,
         numButtons = self:MaxLength(),
-        showEmptyButtons = false
+        showEmptyButtons = false,
+		displayLayer = 'LOW'
     }
 end
 

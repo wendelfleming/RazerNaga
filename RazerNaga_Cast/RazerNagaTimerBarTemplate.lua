@@ -1,9 +1,19 @@
+--[[
+	RazerNagaTimerBarTemplate.lua
+		A dominos based timer bar
+--]]
+
+--[[ globals ]]--
+
 local RazerNaga = LibStub("AceAddon-3.0"):GetAddon("RazerNaga")
 local SharedMedia = LibStub('LibSharedMedia-3.0')
 
 local GetTime = _G.GetTime
 local Clamp = _G.Clamp
 local GetNetStats = _G.GetNetStats
+
+
+--[[ bar ]]--
 
 local TimerBar = {}
 
@@ -320,5 +330,6 @@ function TimerBar:Layout()
     end
 end
 
--- exports
+--[[ exports ]]--
+
 _G.RazerNagaTimerBarMixin = TimerBar

@@ -3,6 +3,8 @@
 		Handle showing/hiding frame tooltips in a secure manner
 --]]
 
+--[[ globals ]]--
+
 local RazerNaga = _G[...]
 local TooltipsModule = RazerNaga:NewModule('Tooltips')
 

@@ -3,6 +3,8 @@
 		Handles automatic keybinding mode for lynn
 --]]
 
+--[[ globals ]]--
+
 local RazerNaga = LibStub('AceAddon-3.0'):GetAddon('RazerNaga')
 local AutoBinder = RazerNaga:NewModule('AutoBinder', 'AceEvent-3.0'); RazerNaga.AutoBinder = AutoBinder
 local L = LibStub('AceLocale-3.0'):GetLocale('RazerNaga')

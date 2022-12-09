@@ -3,6 +3,8 @@
 		Methods for loading RazerNaga bindings
 --]]
 
+--[[ globals ]]--
+
 local RazerNaga = LibStub('AceAddon-3.0'):GetAddon('RazerNaga')
 local BindingsLoader = {}; RazerNaga.BindingsLoader = BindingsLoader
 local L = LibStub('AceLocale-3.0'):GetLocale('RazerNaga')

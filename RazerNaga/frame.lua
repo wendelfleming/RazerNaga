@@ -3,6 +3,8 @@
 		A RazerNaga frame, a generic container object
 --]]
 
+--[[ globals ]]--
+
 local Frame = RazerNaga:CreateClass('Frame')
 local FlyPaper = LibStub("LibFlyPaper-1.0")
 

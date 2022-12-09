@@ -15,7 +15,7 @@ if not ({
     return
 end
 
---[[ Globals ]]--
+--[[ globals ]]--
 
 local RazerNaga = _G[...]
 local KeyBound = LibStub('LibKeyBound-1.0')

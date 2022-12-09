@@ -1,8 +1,9 @@
 ﻿--[[
 	fadeManager.lua
 		Handles fading out frames when not moused over
-		Necessary since using the blizzard fading functions can cause issues in combat
 --]]
+
+--[[ globals ]]--
 
 local RazerNaga = _G[...]
 local MouseOverWatcher = {}

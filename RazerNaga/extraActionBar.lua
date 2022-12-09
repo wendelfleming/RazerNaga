@@ -1,8 +1,8 @@
 if not ExtraAbilityContainer then return end
 
 --[[
-	actionBar.lua
-		A pool of action bars
+	extraActionBar.lua
+		The RazerNaga extra action bar
 --]]
 
 --[[ globals ]]--

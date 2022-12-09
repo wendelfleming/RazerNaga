@@ -3,6 +3,8 @@
 		Driver for RazerNaga Frames
 --]]
 
+--[[ globals ]]--
+
 local AddonName, Addon = ...
 
 RazerNaga = LibStub('AceAddon-3.0'):NewAddon(AddonName, 'AceEvent-3.0', 'AceConsole-3.0')

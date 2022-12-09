@@ -1,3 +1,10 @@
+--[[
+	overrideController.lua
+		Handles the override bars
+--]]
+
+--[[ globals ]]--
+
 local OverrideController = CreateFrame('Frame', nil, UIParent, 'SecureHandlerStateTemplate'); OverrideController:Hide()
 RazerNaga.OverrideController = OverrideController
 

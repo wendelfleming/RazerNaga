@@ -3,6 +3,8 @@
 		Handles modifier key detection, highlighting, and fading
 --]]
 
+--[[ globals ]]--
+
 local RazerNaga = LibStub('AceAddon-3.0'):GetAddon('RazerNaga')
 local ModHighlighter = RazerNaga:NewModule('ModHighlighter', 'AceEvent-3.0'); RazerNaga.ModHighlighter = ModHighlighter
 

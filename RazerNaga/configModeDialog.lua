@@ -3,6 +3,8 @@
 		The RazerNaga config mode dialog display
 --]]
 
+--[[ globals ]]--
+
 local RazerNaga = RazerNaga
 local L = LibStub('AceLocale-3.0'):GetLocale('RazerNaga')
 

@@ -20,6 +20,7 @@ QueueStatusBar:Extend('OnAcquire', function(self) self:Layout() end)
 
 function QueueStatusBar:GetDefaults()
     return {
+		displayLayer = 'MEDIUM',
         point = 'BOTTOMRIGHT',
         x = -250
     }

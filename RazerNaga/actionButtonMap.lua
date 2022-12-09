@@ -6,7 +6,6 @@
 --[[ globals ]]--
 
 local RazerNaga = _G[...]
-
 local BlizzardActionButtons = {}
 
 local function addBar(bar, page)
