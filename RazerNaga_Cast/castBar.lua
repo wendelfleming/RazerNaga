@@ -506,7 +506,7 @@ function CastBar:SetDesiredWidth(width)
 end
 
 function CastBar:GetDesiredWidth()
-    return self.sets.w or 201
+    return self.sets.w or 215
 end
 
 function CastBar:SetDesiredHeight(height)
@@ -515,7 +515,7 @@ function CastBar:SetDesiredHeight(height)
 end
 
 function CastBar:GetDesiredHeight()
-    return self.sets.h or 22
+    return self.sets.h or 24
 end
 
 -- font
