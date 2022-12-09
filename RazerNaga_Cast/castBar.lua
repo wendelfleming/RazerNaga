@@ -87,7 +87,15 @@ function CastBar:GetDefaults()
 		point = 'CENTER',
 		x = 0,
 		y = 30,
-		showText = true,
+		padW = 1,
+        padH = 1,
+		useSpellReactionColors = true,
+		display = {
+			time = true, 
+			border = true, 
+			latency = false, 
+			spark = true
+		}
 	}
 end
 

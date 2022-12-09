@@ -170,8 +170,10 @@ end
 
 --[[ Initialization ]]--
 
-function Frame:LoadSettings(defaults)
+function Frame:LoadSettings()
 	self.sets = RazerNaga:GetFrameSets(self.id) or RazerNaga:SetFrameSets(self.id, self:GetDefaults()) --get defaults must be provided by anything implementing the Frame type
+	self:UpdateDisplayLayer()
+    self:UpdateDisplayLevel()
 	self:Reposition()
 
 	if self.sets.hidden then
@@ -716,6 +718,36 @@ function Frame:GetDisplayName()
 		return ('%s (%s)'):format(self.displayName, self.id)
 	end
 	return self.id
+end
+
+function Frame:GetDisplayLayer()
+    return self.sets.displayLayer or 'MEDIUM'
+end
+
+function Frame:SetDisplayLayer(layer)
+    self.sets.displayLayer = layer
+	self:UpdateDisplayLayer()
+end
+
+function Frame:UpdateDisplayLayer()
+    local layer = self:GetDisplayLayer()
+
+	self:SetFrameStrata(layer)
+end
+
+function Frame:GetDisplayLevel()
+    return self.sets.displayLevel or 1
+end
+
+function Frame:SetDisplayLevel(level)
+    self.sets.displayLevel = tonumber(level) or 0
+	self:UpdateDisplayLevel()
+end
+
+function Frame:UpdateDisplayLevel()
+    local level = self:GetDisplayLevel()
+
+	self:SetFrameLevel(level)
 end
 
 --[[ Sticky Bars ]]--

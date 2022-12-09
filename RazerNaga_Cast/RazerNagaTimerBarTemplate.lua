@@ -8,7 +8,6 @@ local GetNetStats = _G.GetNetStats
 local TimerBar = {}
 
 function TimerBar:OnLoad()
-	self.border:SetFrameStrata('HIGH')
     self:Layout()
 end
 
@@ -85,7 +84,7 @@ function TimerBar:SetTexture(textureID)
     self.statusBar:SetStatusBarTexture(texture)
 end
 
-TimerBar.showSpark = false
+TimerBar.showSpark = true
 
 function TimerBar:SetShowSpark(show)
     self.showSpark = show
@@ -314,7 +313,11 @@ function TimerBar:Layout()
     end
 
     -- place statusbar spark
-    self.statusBar.spark:Show()
+    if self.showSpark then
+        self.statusBar.spark:Show()
+    else
+        self.statusBar.spark:Hide()
+    end
 end
 
 -- exports
