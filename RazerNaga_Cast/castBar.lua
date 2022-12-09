@@ -76,7 +76,7 @@ end)
 
 CastBar:Extend("OnLoadSettings", function(self)
     if not self.sets.display then
-        self.sets.display = {time = true, border = true, latency = true}
+        self.sets.display = {time = true, border = true, latency = false}
     end
 
     self:SetProperty("font", self:GetFontID())
@@ -512,7 +512,7 @@ function CastBar:SetDesiredWidth(width)
 end
 
 function CastBar:GetDesiredWidth()
-    return self.sets.w or 205
+    return self.sets.w or 200
 end
 
 function CastBar:SetDesiredHeight(height)
