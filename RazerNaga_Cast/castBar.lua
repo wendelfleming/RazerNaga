@@ -52,6 +52,7 @@ function CastBar:New(id, units, ...)
     local bar = CastBar.proto.New(self, id, ...)
 
     bar.units = type(units) == "table" and units or {units}
+	bar:SetTooltipText(L.CastBarHelp)
     bar:Layout()
     bar:RegisterEvents()
 
@@ -499,7 +500,7 @@ function CastBar:SetDesiredWidth(width)
 end
 
 function CastBar:GetDesiredWidth()
-    return self.sets.w or 217
+    return self.sets.w or 205
 end
 
 function CastBar:SetDesiredHeight(height)
@@ -508,7 +509,7 @@ function CastBar:SetDesiredHeight(height)
 end
 
 function CastBar:GetDesiredHeight()
-    return self.sets.h or 27
+    return self.sets.h or 22
 end
 
 -- font

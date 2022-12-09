@@ -8,20 +8,8 @@ local GetNetStats = _G.GetNetStats
 local TimerBar = {}
 
 function TimerBar:OnLoad()
-    self.border:SetFrameLevel(self.statusBar:GetFrameLevel() + 3)
-
-    if type(BackdropTemplateMixin) == "table" then
-        Mixin(self.border, BackdropTemplateMixin)
-    end
-
-    self.border:SetBackdrop{
-        edgeFile = "Interface\\FriendsFrame\\UI-Toast-Border",
-        tileEdge = true,
-        edgeSize = 10.5,
-        insets = {left = 0, right = 0, top = 0, bottom = 0}
-    }
-
-    self.Layout = RazerNaga:Defer(TimerBar.Layout, 0.1, self)
+	self.border:SetFrameStrata('HIGH')
+    self:Layout()
 end
 
 function TimerBar:OnSizeChanged()
@@ -125,7 +113,7 @@ function TimerBar:SetShowBorder(show)
     self:Layout()
 end
 
-TimerBar.showLatency = true
+TimerBar.showLatency = false
 
 function TimerBar:SetShowLatency(show)
     self.showLatency = show
