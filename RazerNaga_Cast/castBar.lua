@@ -24,7 +24,7 @@ local CAST_BAR_COLORS = {
     failed = {1, 0, 0},
     harm = {0.63, 0.36, 0.94},
     help = {0.31, 0.78, 0.47},
-    spell = {0, 1, 0},
+    spell = {0.63, 0.36, 0.94},
     uninterruptible = {0.63, 0.63, 0.63}
 }
 
@@ -424,7 +424,7 @@ function CastBar:GetColorID()
         end
     else
         if reaction == "help" then
-            return "spell"
+            return "help"
         end
 
         if reaction == "harm" then
@@ -444,12 +444,6 @@ function CastBar:UpdateColor()
     local r, g, b = unpack(CAST_BAR_COLORS[self:GetColorID()])
 
     self.timer.statusBar:SetStatusBarColor(r, g, b)
-
-    if color == "failed" then
-        self.timer.latencyBar:SetColorTexture(0, 0, 0, 0)
-    else
-        self.timer.latencyBar:SetColorTexture(getLatencyColor(r, g, b))
-    end
 end
 
 function CastBar:Stop()
