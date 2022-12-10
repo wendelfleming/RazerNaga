@@ -14,8 +14,8 @@
             <Frame parentKey="border" setAllPoints="true" virtual="true"/>
             <StatusBar parentKey="statusBar">
                 <Layers>
-					<Layer level="ARTWORK">
-					<Texture parentKey="Border" file="Interface\CastingBar\UI-CastingBar-Border-Small">
+                    <Layer level="OVERLAY">
+						<Texture parentKey="Border" file="Interface\CastingBar\UI-CastingBar-Border-Small">
 						<Size x="275" y="68"/>
 						<Anchors>
 							<Anchor point="CENTER"/>
@@ -29,8 +29,6 @@
 							<Anchor point="CENTER"/>
 						</Anchors>
 					</Texture>
-				</Layer>
-                    <Layer level="OVERLAY">
                         <FontString parentKey="text" inherits="GameFontHighlight" justifyH="RIGHT"/>
                         <FontString parentKey="label" inherits="GameFontHighlight" justifyH="CENTER"/>
                     </Layer>

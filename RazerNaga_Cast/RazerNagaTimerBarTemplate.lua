@@ -18,12 +18,6 @@ local GetNetStats = _G.GetNetStats
 local TimerBar = {}
 
 function TimerBar:OnLoad()
-    self.border:SetFrameLevel(self.statusBar:GetFrameLevel() + 3)
-
-    if type(BackdropTemplateMixin) == "table" then
-        Mixin(self.border, BackdropTemplateMixin)
-    end
-	
     self.Layout = RazerNaga:Defer(TimerBar.Layout, 0.1, self)
 end
 
