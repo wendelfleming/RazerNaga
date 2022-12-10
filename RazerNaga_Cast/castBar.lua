@@ -95,9 +95,8 @@ function CastingBar:New(parent)
 	f:SetPoint('CENTER')
 
 	f.normalWidth = f:GetWidth()
-	f:SetScript('OnShow', f.OnShow)
 	f:SetScript("OnUpdate", self.OnUpdate)
-	f:SetScript('OnEvent', f.OnEvent)
+	f:SetScript('OnEvent', self.OnEvent)
 
 	return f
 end
@@ -162,33 +161,6 @@ end
 
 --[[ Dragonflight ]]--
 
-RazerNagaCastingBarExtensionMixin = {}
-
--- default bars, will get overwritten from layouts
-local typeInfoTexture = "Interface\\TargetingFrame\\UI-StatusBar";
-RazerNagaCastingBarExtensionMixin.typeInfo = {
-    filling = typeInfoTexture,
-    full = typeInfoTexture,
-    glow = typeInfoTexture
-}
-
-local actionColors = {
-    applyingcrafting = { 1.0, 0.7, 0.0, 1 },
-    applyingtalents = { 1.0, 0.7, 0.0, 1 },
-    filling = { 1.0, 0.7, 0.0, 1 },
-    full = { 0.0, 1.0, 0.0, 1 },
-    standard = { 1.0, 0.7, 0.0, 1 },
-    empowered = { 1.0, 0.7, 0.0, 1 },
-    channel = { 0.0, 1.0, 0.0, 1 },
-    uninterruptable = { 0.7, 0.7, 0.7, 1 },
-    interrupted = { 0.86, 0.08, 0.24 }
-}
-
-function RazerNagaCastingBarExtensionMixin:GetTypeInfo(barType)
-    barType = barType or "standard";
-    self:SetStatusBarColor(unpack(actionColors[barType]));
-    return self.typeInfo
-end
 
 --hide the old casting bar
 PlayerCastingBarFrame:UnregisterAllEvents()
