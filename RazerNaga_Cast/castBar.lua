@@ -181,7 +181,7 @@ local actionColors = {
     empowered = { 1.0, 0.7, 0.0, 1 },
     channel = { 0.0, 1.0, 0.0, 1 },
     uninterruptable = { 0.7, 0.7, 0.7, 1 },
-    interrupted = { 1.0, 0.0, 0.0, 1 }
+    interrupted = { 0.86, 0.08, 0.24 }
 }
 
 function RazerNagaCastingBarExtensionMixin:GetTypeInfo(barType)
