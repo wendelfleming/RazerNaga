@@ -4,7 +4,7 @@
 
 	<Script file="castBar.lua"/>
 
-	<StatusBar name="RazerNagaCastingBarTemplate" mixin="CastingBarMixin" inherits="CastingBarFrameAnimsFXTemplate" drawLayer="BORDER" hidden="true" virtual="true">
+	<StatusBar name="RazerNagaCastingBarTemplate" mixin="CastingBarMixin, RazerNagaCastingBarExtensionMixin" inherits="CastingBarFrameAnimsFXTemplate" drawLayer="BORDER" hidden="true" virtual="true">
 		<Size x="210" y="14"/>
 
 		<Layers>
@@ -70,8 +70,5 @@
 				self:OnLoad('player', true, false);
 			</OnLoad>
 		</Scripts>
-
-		<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-		<BarColor r="1.0" g="0.7" b="0.0"/>
 	</StatusBar>
 </Ui>
