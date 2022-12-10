@@ -96,7 +96,7 @@ function CastingBar:New(parent)
 
 	f.normalWidth = f:GetWidth()
 	f:SetScript('OnShow', f.OnShow)
-	f:SetScript('OnUpdate', f.OnUpdate)
+	f:SetScript("OnUpdate", self.OnUpdate)
 	f:SetScript('OnEvent', f.OnEvent)
 
 	return f
