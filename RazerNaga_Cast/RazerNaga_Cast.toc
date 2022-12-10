@@ -4,5 +4,4 @@
 ## Author: Tuller
 ## Dependencies: RazerNaga
 localization.lua
-RazerNagaTimerBarTemplate.xml
-castBar.lua
+castBar.xml
