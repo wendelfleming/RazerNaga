@@ -311,13 +311,6 @@ function SettingsLoader:GetThreeByFour()
 				['x'] = 0,
 				['y'] = 38,
 			},
-			['queue'] = {
-				["showInPetBattleUI"] = false,
-				["x"] = -140,
-				["point"] = "TOPRIGHT",
-				["showInOverrideUI"] = false,
-				["y"] = -206,
-			},
 			['vehicle'] = {
 				['isRightToLeft'] = false,
 				['isBottomToTop'] = false,
@@ -378,6 +371,13 @@ function SettingsLoader:GetThreeByFour()
 				['spacing'] = 0,
 				['x'] = -306,
 				['y'] = 270,
+			},
+			['queue'] = {
+				["showInPetBattleUI"] = false,
+				["x"] = -140,
+				["point"] = "TOPRIGHT",
+				["showInOverrideUI"] = false,
+				["y"] = -206,
 			}
 		},
 	}
@@ -594,14 +594,6 @@ function SettingsLoader:GetFourByThree()
 				['x'] = 0,
 				['y'] = 38,
 			},
-			['queue'] = {
-				["showInPetBattleUI"] = false,
-				["x"] = -184,
-				["point"] = "TOPRIGHT",
-				["scale"] = 0.8,
-				["showInOverrideUI"] = false,
-				["y"] = -265,
-			},
 			['vehicle'] = {
 				['isRightToLeft'] = false,
 				['isBottomToTop'] = false,
@@ -662,6 +654,14 @@ function SettingsLoader:GetFourByThree()
 				['spacing'] = 0,
 				['x'] = -386,
 				['y'] = 230,
+			},
+			['queue'] = {
+				["showInPetBattleUI"] = false,
+				["x"] = -184,
+				["point"] = "TOPRIGHT",
+				["scale"] = 0.8,
+				["showInOverrideUI"] = false,
+				["y"] = -265,
 			}
 		},
 	}
