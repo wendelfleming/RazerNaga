@@ -3,6 +3,8 @@
 		A dominos based casting bar
 --]]
 
+--[[ globals ]]--
+
 local DCB = RazerNaga:NewModule('CastingBar')
 local L = LibStub('AceLocale-3.0'):GetLocale('RazerNaga')
 local CastBar, CastingBar
@@ -104,13 +106,14 @@ end
 function CastingBar:OnEvent(event, ...)
 	CastingBarMixin.OnEvent(self, event, ...)
 
-	local unit = ...
+	local unit, spell = ...
 	if unit == self.unit then
 		if event == 'UNIT_SPELLCAST_FAILED' or event == 'UNIT_SPELLCAST_INTERRUPTED' then
 			self.failed = true
 		elseif event == 'UNIT_SPELLCAST_START' or event == 'UNIT_SPELLCAST_CHANNEL_START' then
 			self.failed = nil
 		end
+		self:UpdateColor(spell)
 	end
 end
 
@@ -146,6 +149,18 @@ function CastingBar:AdjustWidth()
 	end
 end
 
+function CastingBar:UpdateColor(spell)
+	if self.failed then
+		self:SetStatusBarColor(0.86, 0.08, 0.24)
+	elseif spell and IsHelpfulSpell(spell) then
+		self:SetStatusBarColor(0.31, 0.78, 0.47)
+	elseif spell and IsHarmfulSpell(spell) then
+		self:SetStatusBarColor(0.63, 0.36, 0.94)
+	else
+		self:SetStatusBarColor(1, 0.7, 0)
+	end
+end
+
 
 --[[ Dragonflight ]]--
 
@@ -159,21 +174,7 @@ RazerNagaCastingBarExtensionMixin.typeInfo = {
     glow = typeInfoTexture
 }
 
-local CASTING_BAR_TYPES = {
-    applyingcrafting = { 1, 0.7, 0, 1 },
-    applyingtalents = { 1, 0.7, 0, 1 },
-    filling = { 1, 0.7, 0, 1 },
-    full = { 0, 1, 0, 1 },
-    standard = { 1, 0.7, 0, 1 },
-    empowered = { 0.63, 0.36, 0.94 },
-    channel = { 0.31, 0.78, 0.47, 1 },
-    uninterruptable = { 0.7, 0.7, 0.7, 1 },
-    interrupted = { 0.86, 0.08, 0.24, 1 }
-}
-
 function RazerNagaCastingBarExtensionMixin:GetTypeInfo(barType)
-    barType = barType or "standard";
-    self:SetStatusBarColor(unpack(CASTING_BAR_TYPES[barType]));
     return self.typeInfo
 end
 
