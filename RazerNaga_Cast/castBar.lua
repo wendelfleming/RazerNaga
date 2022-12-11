@@ -17,7 +17,6 @@ function DCB:Unload()
 	self.frame:Free()
 end
 
-
 --[[ RazerNaga Frame Object ]]--
 
 CastBar = RazerNaga:CreateClass('Frame', RazerNaga.Frame)
@@ -82,7 +81,6 @@ function CastBar:Layout()
 	self:SetWidth(max(self.cast:GetWidth() + 4 + self:GetPadding()*2, 8))
 	self:SetHeight(max(24 + self:GetPadding()*2, 8))
 end
-
 
 --[[ CastingBar Object ]]--
 
@@ -160,7 +158,6 @@ function CastingBar:UpdateColor(spell)
 		self:SetStatusBarColor(1, 0.7, 0)
 	end
 end
-
 
 --[[ Dragonflight ]]--
 
