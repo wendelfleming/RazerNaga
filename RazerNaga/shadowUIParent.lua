@@ -6,7 +6,6 @@
 --[[ globals ]]--
 
 local RazerNaga = _G['RazerNaga']
-
 local ShadowUIParent = RazerNaga:CreateHiddenFrame('Frame', nil, UIParent)
 
 ShadowUIParent:SetAllPoints(UIParent)

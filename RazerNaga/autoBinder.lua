@@ -53,7 +53,6 @@ function AutoBinder:PLAYER_LOGOUT()
 	--self:EnforceBindings()
 end
 
-
 --[[ Update Methods ]]--
 
 function AutoBinder:SetEnableAutomaticBindings(enable)

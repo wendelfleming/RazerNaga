@@ -514,7 +514,6 @@ do
 	end
 end
 
-
 --[[ Action Bar Controller ]]--
 
 local ActionBarsModule = RazerNaga:NewModule('ActionBars', 'AceEvent-3.0')

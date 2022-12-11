@@ -3,6 +3,8 @@
 		A thingy for mapping stateIds to macro states
 --]]
 
+--[[ globals ]]--
+
 local states = {}
 
 local function getStateIterator(type, i)

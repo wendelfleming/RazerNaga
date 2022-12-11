@@ -65,7 +65,6 @@ function BagBar:Reload()
 	self:UpdateClickThrough()
 end
 
-
 --[[ Frame Overrides ]]--
 
 function BagBar:AddButton(i)

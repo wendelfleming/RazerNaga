@@ -387,7 +387,6 @@ function Frame:GetFrameScale()
 	return self.sets.scale or 1
 end
 
-
 --[[ Opacity ]]--
 
 hooksecurefunc(Frame, 'SetAlpha', function(self, alpha)
@@ -464,7 +463,6 @@ function Frame:GetExpectedAlpha()
 	return self:GetFrameAlpha() * self:GetFadeMultiplier()
 end
 
-
 --[[ Mouseover Checking ]]--
 
 local function isChildFocus(...)
@@ -522,7 +520,6 @@ function Frame:IsDockedFocus()
 	return false
 end
 
-
 --[[ Fading ]]--
 
 local function fader_Create(parent)
@@ -554,7 +551,6 @@ local Fade = setmetatable({}, {__index = function(t, parent)
 	return fade
 end})
 
-
 --fades the frame from the current opacity setting
 --to the expected setting
 function Frame:Fade()
@@ -571,7 +567,6 @@ function Frame:Fade()
 		self:ForDocked('Fade')
 	end
 end
-
 
 --[[ Visibility ]]--
 
@@ -613,7 +608,6 @@ function Frame:FrameIsShown()
 	return not self.sets.hidden
 end
 
-
 --[[ Perspectives Visibility ]] --
 
 function Frame:ShowInOverrideUI(enable)
@@ -633,7 +627,6 @@ end
 function Frame:ShowingInPetBattleUI()
 	return self.sets.showInPetBattleUI
 end
-
 
 --[[ Clickthrough ]]--
 
@@ -659,7 +652,6 @@ function Frame:UpdateClickThrough()
 		end
 	end
 end
-
 
 --[[ Show states ]]--
 
@@ -696,7 +688,6 @@ function Frame:UpdateShowStates()
 	end
 end
 
-
 --[[ Lock/Unlock ]]--
 
 function Frame:Lock()
@@ -706,7 +697,6 @@ end
 function Frame:Unlock()
 	self.drag:Show()
 end
-
 
 --[[ Display Name ]]--
 
@@ -867,7 +857,6 @@ function Frame:GetAnchor()
 	end
 end
 
-
 --[[ Positioning ]]--
 
 function Frame:SetFramePosition(...)
@@ -879,8 +868,6 @@ function Frame:SetAndSaveFramePosition(point, x, y)
 	self:SetFramePosition(point, x, y)
 	self:SaveFramePosition(point, x, y)
 end
-
-
 
 --[[ Relative Positioning ]]--
 
@@ -928,7 +915,6 @@ function Frame:GetRelativeFramePosition()
 	return point, x, y
 end
 
-
 --[[ Position Saving ]]--
 
 local roundPoint = function(point)
@@ -970,7 +956,6 @@ function Frame:GetSavedFramePosition()
 	return point, x, y
 end
 
-
 --[[ Menus ]]--
 
 function Frame:CreateMenu()
@@ -999,7 +984,6 @@ function Frame:ShowMenu()
 	end
 end
 
-
 --[[ Tooltip Text ]]--
 
 function Frame:SetTooltipText(text)
@@ -1009,7 +993,6 @@ end
 function Frame:GetTooltipText()
 	return self.tooltipText
 end
-
 
 --[[ Mouseover Watching ]]--
 

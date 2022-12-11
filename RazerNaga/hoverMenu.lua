@@ -69,7 +69,6 @@ function HoverMenu:Load()
 	self.isLoaded = true
 end
 
-
 local function basicButton_SetTexture(self, texture)
 	self:GetNormalTexture():SetTexture(texture)
 	self:GetPushedTexture():SetTexture(texture)
@@ -157,5 +156,7 @@ function HoverMenu:CreateToggleConfigMenuButton()
 
 	return b
 end
+
+--[[ exports ]]--
 
 RazerNaga.HoverMenu = HoverMenu

@@ -118,7 +118,6 @@ function ExtraAbilityBarModule:RepositionExtraAbilityContainer()
     end
 end
 
-
 -- Titan panel will attempt to take control of the ExtraActionBarFrame and break
 -- its position and ability to be usable. This is because Titan Panel doesn't
 -- check to see if another addon has taken control of the bar

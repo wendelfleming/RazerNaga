@@ -10,7 +10,6 @@ RazerNaga.DragFrame = Drag
 
 local L = LibStub('AceLocale-3.0'):GetLocale('RazerNaga')
 
-
 function Drag:New(owner)
 	local f = self:Bind(CreateFrame('Button', nil, UIParent))
 	f.owner = owner
@@ -46,7 +45,6 @@ function Drag:New(owner)
 
 	return f
 end
-
 
 function Drag:OnEnter()
 	RazerNaga.HoverMenu:Set(self.owner)

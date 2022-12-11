@@ -47,7 +47,6 @@ ModHighlighter.OnStateChanged = RazerNaga.Debounce(function(self)
 	ModHighlighter:FadeBars()
 end, 0.03)
 
-
 --[[ Configuration ]]--
 
 function ModHighlighter:SetHighlightModifiers(enable)
@@ -71,7 +70,6 @@ function ModHighlighter:GetActiveFrameModifier(frame)
 	local BindingsLoader = RazerNaga.BindingsLoader
 	return BindingsLoader:IsAutoBindingEnabled(frame) and BindingsLoader:GetFrameModifier(frame)
 end
-
 
 --[[ Highlighting ]]--
 
