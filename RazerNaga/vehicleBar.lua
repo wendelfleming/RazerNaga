@@ -14,6 +14,7 @@ local UnitControllingVehicle = _G.UnitControllingVehicle or function() return fa
 local CanExitVehicle = _G.CanExitVehicle or function() return false end
 local POSSESS_CANCEL_SLOT = _G.POSSESS_CANCEL_SLOT or 2
 
+
 --[[ button ]]--
 
 local function possessButton_OnClick(self)
@@ -80,6 +81,7 @@ local function getOrCreatePossessButton(id)
 
     return button
 end
+
 
 --[[ bar ]]--
 
@@ -166,6 +168,12 @@ function VehicleBar:AddLayoutPanel(menu)
 	return panel
 end
 
+
+--[[ exports ]]--
+
+RazerNaga.VehicleBar = VehicleBar
+
+
 --[[ module ]]--
 
 local VehicleBarModule = RazerNaga:NewModule('VehicleBar', 'AceEvent-3.0')
@@ -206,7 +214,3 @@ function VehicleBarModule:Update()
         self.bar:Update()
     end
 end
-
---[[ exports ]]--
-
-RazerNaga.VehicleBar = VehicleBar

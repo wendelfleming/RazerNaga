@@ -17,6 +17,7 @@ function DCB:Unload()
 	self.frame:Free()
 end
 
+
 --[[ RazerNaga Frame Object ]]--
 
 CastBar = RazerNaga:CreateClass('Frame', RazerNaga.Frame)
@@ -82,6 +83,7 @@ function CastBar:Layout()
 	self:SetHeight(max(24 + self:GetPadding()*2, 8))
 end
 
+
 --[[ CastingBar Object ]]--
 
 CastingBar = RazerNaga:CreateClass('StatusBar')
@@ -104,14 +106,20 @@ end
 function CastingBar:OnEvent(event, ...)
 	CastingBarMixin.OnEvent(self, event, ...)
 
-	local unit, spell = ...
+	local unit = self.unit
 	if unit == self.unit then
-		if event == 'UNIT_SPELLCAST_FAILED' or event == 'UNIT_SPELLCAST_INTERRUPTED' then
+		if event == 'UNIT_SPELLCAST_START' then
+			self:SetStatusBarColor(1.0, 0.7, 0.0)
+			self.failed = nil
+		elseif event == 'UNIT_SPELLCAST_FAILED' or event == 'UNIT_SPELLCAST_INTERRUPTED' then
+			self:SetValue(self.maxValue)
+			self:SetStatusBarColor(0.86, 0.08, 0.24)
+			self.Spark:Hide()
 			self.failed = true
-		elseif event == 'UNIT_SPELLCAST_START' or event == 'UNIT_SPELLCAST_CHANNEL_START' then
+		elseif event == 'UNIT_SPELLCAST_CHANNEL_START' then
+			self:SetStatusBarColor(0.31, 0.78, 0.47)
 			self.failed = nil
 		end
-		self:UpdateColor(spell)
 	end
 end
 
@@ -158,6 +166,7 @@ function CastingBar:UpdateColor(spell)
 		self:SetStatusBarColor(1, 0.7, 0)
 	end
 end
+
 
 --[[ Dragonflight ]]--
 

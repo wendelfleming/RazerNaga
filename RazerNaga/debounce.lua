@@ -31,6 +31,7 @@ local function Updater_Create(owner)
 	return updater
 end
 
+
 --[[ Debounce ]]--
 
 local Debounce = {}; RazerNaga.Debounce = Debounce

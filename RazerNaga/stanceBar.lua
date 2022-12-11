@@ -116,6 +116,10 @@ function StanceBar:UpdateActions()
     end
 end
 
+--[[ exports ]]--
+
+RazerNaga.StanceBar = StanceBar
+
 --[[ custom menu ]]--
 
 function StanceBar:CreateMenu()
@@ -127,6 +131,7 @@ function StanceBar:CreateMenu()
 
 	StanceBar.menu = menu
 end
+
 
 --[[ Module ]]--
 
@@ -164,7 +169,3 @@ StanceBarModule.UpdateStanceButtons = RazerNaga:Defer(function(self)
         bar:UpdateActions()
     end
 end, 0.01, StanceBarModule)
-
---[[ exports ]]--
-
-RazerNaga.StanceBar = StanceBar

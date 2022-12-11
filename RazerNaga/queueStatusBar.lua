@@ -9,8 +9,7 @@ if not (QueueStatusButton) then return end
 local RazerNaga = _G[...]
 local L = LibStub('AceLocale-3.0'):GetLocale('RazerNaga')
 
---[[ bar ]]--
-
+-- bar
 local QueueStatusBar = RazerNaga:CreateClass('Frame', RazerNaga.Frame)
 
 function QueueStatusBar:New()
@@ -38,8 +37,7 @@ function QueueStatusBar:Layout()
     self:TrySetSize(w + pW, h + pH)
 end
 
---[[ menu ]]--
-
+-- menu
 function QueueStatusBar:CreateMenu()
 	local menu = RazerNaga:NewMenu(self.id)
 
@@ -61,8 +59,7 @@ function QueueStatusBar:AddLayoutPanel(menu)
 	return panel
 end
 
---[[ module ]]--
-
+-- module
 local QueueStatusBarModule = RazerNaga:NewModule('QueueStatusBar', 'AceEvent-3.0')
 
 function QueueStatusBarModule:Load()

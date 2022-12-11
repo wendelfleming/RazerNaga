@@ -21,6 +21,7 @@ function EnvoyProto:New(obj)
 	return o
 end
 
+
 --trigger a message, with the given args
 function EnvoyProto:Send(msg, ...)
 	assert(msg, 'Usage: EnvoyProto:Send(msg[, args])')
@@ -33,6 +34,7 @@ function EnvoyProto:Send(msg, ...)
 		end
 	end
 end
+
 
 --tells obj to do something when msg happens
 function EnvoyProto:Register(obj, msg, method)
@@ -81,6 +83,7 @@ function EnvoyProto:Unregister(obj, msg)
 --	assert(not(self.listeners[msg] and self.listeners[msg][obj]), 'EnvoyProto: Failed to ignore ' .. msg)
 end
 
+
 --ignore all messages for obj
 function EnvoyProto:UnregisterAll(obj)
 	assert(obj, 'Usage: EnvoyProto:UnregisterAll(obj)')
@@ -89,6 +92,7 @@ function EnvoyProto:UnregisterAll(obj)
 		self:Unregister(obj, msg)
 	end
 end
+
 
 --create a RazerNaga specific instance of envy
 RazerNaga.Envoy = EnvoyProto:New()

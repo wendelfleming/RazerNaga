@@ -81,7 +81,9 @@ local TimerPrototype = {
 }
 
 
---[[ Timer ]]--
+--[[
+	Timer
+--]]
 
 local Timer = {}; RazerNaga.Timer = Timer
 

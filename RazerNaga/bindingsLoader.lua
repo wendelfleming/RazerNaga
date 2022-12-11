@@ -1,5 +1,5 @@
 --[[
-	bindingsLoader.lua
+	BindingsLoader.lua
 		Methods for loading RazerNaga bindings
 --]]
 
@@ -50,6 +50,7 @@ local function isValidBlizzardBindingSet(bindingSet)
 	return bindingSet == 1 or bindingSet == 2
 end
 
+
 --binding set registration
 function BindingsLoader:AddBindingsSet(set)
 	assert(set, 'No set provided')
@@ -97,6 +98,7 @@ function BindingsLoader:AssignBindingsToFrame(frame, bindings, modifier)
 	end
 end
 
+
 --[[ Accessor Methods ]]--
 
 --retrieves a the bindings set for the current layout based on the given id
@@ -128,6 +130,7 @@ function BindingsLoader:GetCurrentBindingsSet()
 	return self:GetBindingsSetByID(self:GetCurrentBindingsSetID())
 end
 
+
 --set iterators
 local function getSetsForLayoutIterator(layout, i)
 	for j = i + 1, #bindingsSets do
@@ -143,6 +146,7 @@ function BindingsLoader:GetAvailableBindingsSets()
 	local layout = RazerNaga.SettingsLoader:GetLayoutType()
 	return getSetsForLayoutIterator, layout, 0
 end
+
 
 --[[ Modifier Assignments, Frame -> Modifier ]]--
 
@@ -219,6 +223,7 @@ function BindingsLoader:IsAutoBindingEnabled(frame)
 	return frame.sets.enableAutoBinding
 end
 
+
 --[[ Modifier Listing ]]--
 
 function BindingsLoader:GetActiveModifierAssignment(modifier)
@@ -240,7 +245,11 @@ function BindingsLoader:GetLocalizedModiferName(modifier)
 	return MODIFIER_NAMES[modifier]
 end
 
---[[ Binding Sets ]]--
+
+--[[
+	Binding Sets
+--]]
+
 
 --simple set
 BindingsLoader:AddBindingsSet{
