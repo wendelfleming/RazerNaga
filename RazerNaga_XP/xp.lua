@@ -1,6 +1,6 @@
 --[[
         xp.lua
-			The dominos xp bar
+			The razernaga xp bar
 --]]
 
 --[[ globals ]]--
@@ -196,6 +196,7 @@ function XP:UpdateExperience()
 	end
 end
 
+
 --[[ Reputation ]]--
 
 function XP:WatchReputation()
@@ -344,9 +345,7 @@ function XP:ToggleText(enable)
 end
 
 
---[[
-	Layout Panel
---]]
+--[[ Layout Panel ]]--
 
 local function CreateWidthSlider(p)
 	local s = p:NewSlider(L.Width, 1, 100, 1)
@@ -391,9 +390,7 @@ local function AddLayoutPanel(menu)
 end
 
 
---[[
-	Texture Picker
---]]
+--[[ Texture Picker ]]--
 
 --yeah I know I'm bad in that I didn't capitialize some constants
 local NUM_ITEMS = 9
