@@ -313,33 +313,24 @@ function ActionBar:UpdateTransparent(force)
     end
 end
 
--- flyout direction calculations
+--[[ flyout direction updating ]]--
+
 function ActionBar:GetFlyoutDirection()
-    local direction = self.sets.flyoutDirection or 'auto'
+	local w, h = self:GetSize()
+	local isVertical = w < h
+	local anchor = self:GetPoint()
 
-    if direction == 'auto' then
-        --return self:GetCalculatedFlyoutDirection()
-    end
+	if isVertical then
+		if anchor and anchor:match('LEFT') then
+			return 'RIGHT'
+		end
+		return 'LEFT'
+	end
 
-    return direction
-end
-
-function ActionBar:GetCalculatedFlyoutDirection()
-    local width, height = self:GetSize()
-    local _, relPoint = self:GetRelativePosition()
-
-    if width < height then
-        if relPoint:match('RIGHT') then
-            return 'LEFT'
-        end
-
-        return 'RIGHT'
-    end
-
-    if relPoint and relPoint:match('TOP') then
-        return 'DOWN'
-    end
-    return 'UP'
+	if anchor and anchor:match('TOP') then
+		return 'DOWN'
+	end
+	return 'UP'
 end
 
 function ActionBar:SetFlyoutDirection(direction)

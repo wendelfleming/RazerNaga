@@ -128,6 +128,7 @@ RazerNaga.ActionButtonMixin = ActionButtonMixin
 --[[ Buttons ]]--
 
 local createActionButton
+local SecureHandler = RazerNaga:CreateHiddenFrame('Frame', nil, nil, "SecureHandlerBaseTemplate")
     -- dragonflight hack: whenever a Dominos action button's action changes
     -- set the action of the corresponding blizzard action button
     -- this ensures that pressing a blizzard keybinding does the same thing as
@@ -137,21 +138,21 @@ local createActionButton
     -- use some behaviors only available to blizzard action buttons, mainly cast on
     -- key down and press and hold casting
 local function proxyActionButton(owner, target)
+	if not target then return end
     -- disable paging on the target by giving the target an ID of zero
      target:SetID(0)
 
     -- display the target's binding action
     owner.commandName = target.commandName
 
-    -- ensure the target's action matches the parent's action
-	local proxy = CreateFrame('Frame', nil, nil, "SecureHandlerBaseTemplate")
-    proxy:Hide()
-    proxy:SetFrameRef("target", target)
-    proxy:WrapScript(owner, "OnAttributeChanged", [[
-    if name ~= "action" then return end
-        local target = control:GetFrameRef("target")
+   -- mirror the owner's action on target whenever it changes
+    SecureHandlerSetFrameRef(owner, "ProxyTarget", target)
+
+    SecureHandler:WrapScript(owner, "OnAttributeChanged", [[
+        if name ~= "action" then return end
+        local target = self:GetFrameRef("ProxyTarget")
         if target and target:GetAttribute(name) ~= value then
-           target:SetAttribute(name, value)
+			target:SetAttribute(name, value)
         end
     ]])
 
@@ -165,11 +166,19 @@ local function createActionButton(id)
     local buttonName = ('%sActionButton%d'):format('RazerNaga', id)
     local button = CreateFrame('CheckButton', buttonName, nil, 'ActionBarButtonTemplate')
 
-    local target = RazerNaga.BlizzardActionButtons[id]
+    -- inject custom flyout handling
+    RazerNaga.SpellFlyout:WrapScript(button, "OnClick", [[
+        if button == "LeftButton" and not down then
+            local actionType, actionID = GetActionInfo(self:GetAttribute("action"))
+            if actionType == "flyout" then
+                control:SetAttribute("caller", self)
+                control:RunAttribute("Toggle", actionID)
+                return false
+            end
+        end
+    ]])
 
-    if target then
-       proxyActionButton(button, target)
-    end
+    proxyActionButton(button, RazerNaga.BlizzardActionButtons[id])
 
     return button
 end
