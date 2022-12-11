@@ -56,8 +56,6 @@ ActionBar.mainbarOffsets = {
         elseif i == 'PRIEST' then
             pages.shadowform = 6
         end
-		
-        pages.dragonriding = 10
 
         t[i] = pages
         return pages

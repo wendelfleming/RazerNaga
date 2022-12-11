@@ -126,9 +126,6 @@ elseif class == 'WARRIOR' then
     addState('class', 'shield', getEquippedConditional(Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Shield))
 end
 
--- dragonriding
-addState('class', 'dragonriding', '[bonusbar:5]', GENERIC_TRAIT_FRAME_DRAGONRIDING_TITLE)
-
 -- race
 if race == 'NightElf' then
     local name = (GetSpellInfo(58984) or GetSpellInfo(20580))
