@@ -65,6 +65,9 @@ function EncounterBar:InitPlayerPowerBarAlt()
 	end
 end
 
+
+--[[ menu ]]--
+
 function EncounterBar:CreateMenu()
 	local menu = RazerNaga:NewMenu(self.id)
 
