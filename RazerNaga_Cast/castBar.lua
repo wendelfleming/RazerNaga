@@ -144,26 +144,14 @@ function CastingBar:AdjustWidth()
 		width = self.normalWidth
 	end
 
-	local diff = math.abs(width - self:GetWidth())	-- calculate an absolute difference between needed size and last size
+	local diff = math.abs(width - self:GetWidth()) -- calculate an absolute difference between needed size and last size
 
-	if diff > TEXT_PADDING then			-- is the difference big enough to redraw the bar ?
+	if diff > TEXT_PADDING then -- is the difference big enough to redraw the bar ?
 		self:SetWidth(width)
 		self.Border:SetWidth(width * BORDER_SCALE)
 		self.Flash:SetWidth(width * BORDER_SCALE)
 
 		self:GetParent():Layout()
-	end
-end
-
-function CastingBar:UpdateColor(spell)
-	if self.failed then
-		self:SetStatusBarColor(0.86, 0.08, 0.24)
-	elseif spell and IsHelpfulSpell(spell) then
-		self:SetStatusBarColor(0.31, 0.78, 0.47)
-	elseif spell and IsHarmfulSpell(spell) then
-		self:SetStatusBarColor(0.63, 0.36, 0.94)
-	else
-		self:SetStatusBarColor(1, 0.7, 0)
 	end
 end
 
