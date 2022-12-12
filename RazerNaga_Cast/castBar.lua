@@ -29,8 +29,7 @@ function CastBar:New()
 
 	if not f.cast then
 		f.cast = CastingBar:New(f)
-		f:SetWidth(240)
-		f:SetHeight(24)
+		f:SetSize(240, 24)
 	end
 
 	f:UpdateText()
@@ -137,6 +136,9 @@ end
 
 function CastingBar_FinishSpell(self)
 	self:SetStatusBarColor(0.0, 1.0, 0.0)
+	if self.Spark then
+			self.Spark:Hide()
+		end
 	self.casting = nil
 	self.channeling = nil
 end
