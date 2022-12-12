@@ -106,19 +106,18 @@ end
 function CastingBar:OnEvent(event, ...)
 	CastingBarMixin.OnEvent(self, event, ...)
 
-	local unit, spell = ...
-	if unit == self.unit then
-		if event == 'UNIT_SPELLCAST_FAILED' or event == 'UNIT_SPELLCAST_INTERRUPTED' then
-			self:SetValue(self.maxValue)
-			self.Spark:Hide()
-			self.failed = true
-		elseif event == 'UNIT_SPELLCAST_START' or event == 'UNIT_SPELLCAST_CHANNEL_START' then
-			self.failed = nil
-		elseif event == "UNIT_SPELLCAST_CHANNEL_STOP" then
-			self:SetValue(self.maxValue)
-			self.failed = true
-		end
-		self:UpdateColor(spell)
+	local unit = self.unit
+	if event == 'UNIT_SPELLCAST_START' then
+		self:SetStatusBarColor(1.0, 0.7, 0.0)
+	elseif event == "UNIT_SPELLCAST_STOP" or event == "UNIT_SPELLCAST_CHANNEL_STOP" then
+		self:SetValue(self.maxValue)
+		self:SetStatusBarColor(0.86, 0.08, 0.24)
+	elseif event == 'UNIT_SPELLCAST_FAILED' or event == 'UNIT_SPELLCAST_INTERRUPTED' then
+		self:SetValue(self.maxValue)
+		self:SetStatusBarColor(0.86, 0.08, 0.24)
+		self.Spark:Hide()
+	elseif event == 'UNIT_SPELLCAST_CHANNEL_START' then
+		self:SetStatusBarColor(0.31, 0.78, 0.47)
 	end
 end
 
@@ -151,18 +150,6 @@ function CastingBar:AdjustWidth()
 		self.Flash:SetWidth(width * BORDER_SCALE)
 
 		self:GetParent():Layout()
-	end
-end
-
-function CastingBar:UpdateColor(spell)
-	if self.failed then
-		self:SetStatusBarColor(0.86, 0.08, 0.24)
-	elseif spell and IsHelpfulSpell(spell) then
-		self:SetStatusBarColor(0.31, 0.78, 0.47)
-	elseif spell and IsHarmfulSpell(spell) then
-		self:SetStatusBarColor(0.63, 0.36, 0.94)
-	else
-		self:SetStatusBarColor(1, 0.7, 0)
 	end
 end
 
