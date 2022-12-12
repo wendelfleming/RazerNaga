@@ -109,20 +109,13 @@ function CastingBar:OnEvent(event, ...)
 	local unit = self.unit
 	if event == "UNIT_SPELLCAST_START" then
 		self:SetStatusBarColor(1.0, 0.7, 0.0)
-		self.failed = nil
 	elseif event == "UNIT_SPELLCAST_FAILED" or event == "UNIT_SPELLCAST_INTERRUPTED" then
-		self:SetValue(self.maxValue)
 		self:SetStatusBarColor(0.86, 0.08, 0.24)
 		if self.Spark then
 			self.Spark:Hide()
 		end
-		self.failed = true
 	elseif event == "UNIT_SPELLCAST_CHANNEL_START" then
 		self:SetStatusBarColor(0.0, 1.0, 0.0)
-		self.failed = nil
-	elseif event == "UNIT_SPELLCAST_CHANNEL_STOP" then
-		self:SetValue(self.maxValue)
-		self.failed = nil
 	end	
 end
 
@@ -135,7 +128,18 @@ function CastingBar:OnUpdate(elapsed)
 	elseif self.channeling then
 		self.Time:SetFormattedText('%.1f', self.value)
 		self:AdjustWidth()
+	elseif self.value >= self.maxValue then
+		CastingBar_FinishSpell(self)
 	end
+end
+
+function CastingBar_FinishSpell(self)
+	self:SetStatusBarColor(0.0, 1.0, 0.0)
+	if self.Spark then
+			self.Spark:Hide()
+		end
+	self.casting = nil
+	self.channeling = nil
 end
 
 function CastingBar:AdjustWidth()
