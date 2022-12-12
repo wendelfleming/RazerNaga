@@ -29,7 +29,8 @@ function CastBar:New()
 
 	if not f.cast then
 		f.cast = CastingBar:New(f)
-		f:SetSize(240, 24)
+		f:SetWidth(240)
+		f:SetHeight(24)
 	end
 
 	f:UpdateText()
