@@ -105,20 +105,25 @@ end
 
 function CastingBar:OnEvent(event, ...)
 	CastingBarMixin.OnEvent(self, event, ...)
-
+	
 	local unit = self.unit
-	if event == 'UNIT_SPELLCAST_START' then
+	if event == "UNIT_SPELLCAST_START" then
 		self:SetStatusBarColor(1.0, 0.7, 0.0)
-	elseif event == "UNIT_SPELLCAST_STOP" or event == "UNIT_SPELLCAST_CHANNEL_STOP" then
+		self.failed = nil
+	elseif event == "UNIT_SPELLCAST_FAILED" or event == "UNIT_SPELLCAST_INTERRUPTED" then
 		self:SetValue(self.maxValue)
 		self:SetStatusBarColor(0.86, 0.08, 0.24)
-	elseif event == 'UNIT_SPELLCAST_FAILED' or event == 'UNIT_SPELLCAST_INTERRUPTED' then
+		if self.Spark then
+			self.Spark:Hide()
+		end
+		self.failed = true
+	elseif event == "UNIT_SPELLCAST_CHANNEL_START" then
+		self:SetStatusBarColor(0.0, 1.0, 0.0)
+		self.failed = nil
+	elseif event == "UNIT_SPELLCAST_CHANNEL_STOP" then
 		self:SetValue(self.maxValue)
-		self:SetStatusBarColor(0.86, 0.08, 0.24)
-		self.Spark:Hide()
-	elseif event == 'UNIT_SPELLCAST_CHANNEL_START' then
-		self:SetStatusBarColor(0.31, 0.78, 0.47)
-	end
+		self.failed = nil
+	end	
 end
 
 function CastingBar:OnUpdate(elapsed)
