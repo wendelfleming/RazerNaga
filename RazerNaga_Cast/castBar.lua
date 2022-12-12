@@ -107,13 +107,13 @@ function CastingBar:OnEvent(event, ...)
 	CastingBarMixin.OnEvent(self, event, ...)
 	
 	local unit = self.unit
-	if event == "UNIT_SPELLCAST_START" then
-		self:SetStatusBarColor(1.0, 0.7, 0.0)
-	elseif event == "UNIT_SPELLCAST_FAILED" or event == "UNIT_SPELLCAST_INTERRUPTED" then
-		self:SetStatusBarColor(0.86, 0.08, 0.24)
-	elseif event == "UNIT_SPELLCAST_CHANNEL_START" then
-		self:SetStatusBarColor(0.0, 1.0, 0.0)
-	end	
+	local spell = UnitCastingInfo(unit)
+	if event == 'UNIT_SPELLCAST_FAILED' or event == 'UNIT_SPELLCAST_INTERRUPTED' then
+		self.failed = true
+	elseif event == 'UNIT_SPELLCAST_START' or event == 'UNIT_SPELLCAST_CHANNEL_START' then
+		self.failed = nil
+	end
+	self:UpdateColor(spell)
 end
 
 function CastingBar:OnUpdate(elapsed)
@@ -126,22 +126,11 @@ function CastingBar:OnUpdate(elapsed)
 		self.Time:SetFormattedText('%.1f', self.value)
 		self:AdjustWidth()
 	elseif self.value >= self.maxValue then
-		CastingBar_FinishSpell(self)
+		self:SetStatusBarColor(0.0, 1.0, 0.0)
 	else 
 		self:SetValue(self.maxValue)
-		if self.Spark then
-			self.Spark:Hide()
-		end
+		self:HideSpark()
 	end
-end
-
-function CastingBar_FinishSpell(self)
-	self:SetStatusBarColor(0.0, 1.0, 0.0)
-	if self.Spark then
-			self.Spark:Hide()
-		end
-	self.casting = nil
-	self.channeling = nil
 end
 
 function CastingBar:AdjustWidth()
@@ -153,9 +142,9 @@ function CastingBar:AdjustWidth()
 		width = self.normalWidth
 	end
 
-	local diff = math.abs(width - self:GetWidth()) -- calculate an absolute difference between needed size and last size
+	local diff = math.abs(width - self:GetWidth())	-- calculate an absolute difference between needed size and last size
 
-	if diff > TEXT_PADDING then -- is the difference big enough to redraw the bar ?
+	if diff > TEXT_PADDING then			-- is the difference big enough to redraw the bar ?
 		self:SetWidth(width)
 		self.Border:SetWidth(width * BORDER_SCALE)
 		self.Flash:SetWidth(width * BORDER_SCALE)
@@ -163,6 +152,22 @@ function CastingBar:AdjustWidth()
 		self:GetParent():Layout()
 	end
 end
+
+function CastingBar:UpdateColor(spell)
+	if self.failed then
+		self:SetStatusBarColor(0.86, 0.08, 0.24)
+	elseif spell and IsHelpfulSpell(spell) then
+		self:SetStatusBarColor(0.31, 0.78, 0.47)
+	elseif spell and IsHarmfulSpell(spell) then
+		self:SetStatusBarColor(0.63, 0.36, 0.94)
+	else
+		self:SetStatusBarColor(1, 0.7, 0)
+	end
+end
+
+--hide the old casting bar
+PlayerCastingBarFrame:UnregisterAllEvents()
+PlayerCastingBarFrame:Hide()
 
 
 --[[ Dragonflight ]]--
@@ -180,7 +185,3 @@ RazerNagaCastingBarExtensionMixin.typeInfo = {
 function RazerNagaCastingBarExtensionMixin:GetTypeInfo(barType)
     return self.typeInfo
 end
-
---hide the old casting bar
-PlayerCastingBarFrame:UnregisterAllEvents()
-PlayerCastingBarFrame:Hide()
