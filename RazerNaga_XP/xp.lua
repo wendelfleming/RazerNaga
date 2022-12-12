@@ -3,22 +3,32 @@
 			The razernaga xp bar
 --]]
 
---[[ globals ]]--
-
-local XP_FORMAT = '%s / %s [%s%%]'
-local REST_FORMAT = '%s / %s (+%s) [%s%%]'
 local REP_FORMAT = '%s:  %s / %s (%s)'
-local DEFAULT_STATUSBAR_TEXTURE = [[Interface\TargetingFrame\UI-StatusBar]]
+local FRIEND_ID_FACTION_COLOR_INDEX = 5 --color index to use for friend factions
 local L = LibStub('AceLocale-3.0'):GetLocale('RazerNaga-XP')
-local _G = getfenv(0)
+local DEFAULT_STATUSBAR_TEXTURE = [[Interface\TargetingFrame\UI-StatusBar]]
 
---taken from http://lua-users.org/wiki/FormattingNumbers 
+--taken from http://lua-users.org/wiki/FormattingNumbers
 --a semi clever way to format numbers with commas (ex, 1,000,000)
-local function comma_value(n)
-	local left,num,right = string.match(tostring(n), '^([^%d]*%d)(%d*)(.-)$')
-	return left..(num:reverse():gsub('(%d%d%d)','%1,'):reverse())..right
+local round = function(x)
+	return math.floor(x + 0.5)
 end
 
+local comma = function(n)
+	local left, num, right = tostring(n):match('^([^%d]*%d)(%d*)(.-)$')
+	return left .. (num:reverse():gsub('(%d%d%d)','%1,'):reverse()) .. right
+end
+
+local short = TextStatusBar_CapDisplayOfNumericValue
+
+local textEnv = {
+	format = string.format,
+	math = math,
+	string = string,
+	short = short,
+	round = round,
+	comma = comma,
+}
 
 --[[ Module Stuff ]]--
 
@@ -83,11 +93,16 @@ function XP:Load()
 	value:SetAllPoints(self)
 	self.value = value
 
-	local text = value:CreateFontString(nil, 'OVERLAY', 'GameFontHighlight')
+	local blank = CreateFrame('StatusBar', nil, value)
+	blank:EnableMouse(false)
+	blank:SetAllPoints(self)
+	self.blank = blank
+
+	local text = blank:CreateFontString(nil, 'OVERLAY', 'GameFontHighlight')
 	text:SetPoint('CENTER')
 	self.text = text
 
-	local click = CreateFrame('Button', nil, value)
+	local click = CreateFrame('Button', nil, blank)
 	click:SetScript('OnClick', function(_, ...) self:OnClick(...) end)
 	click:SetScript('OnEnter', function(_, ...) self:OnEnter(...) end)
 	click:SetScript('OnLeave', function(_, ...) self:OnLeave(...) end)
@@ -98,7 +113,7 @@ end
 function XP:OnClick(button)
 	if button == 'RightButton' and FFF_ReputationWatchBar_OnClick then
 		self:SetAlwaysShowXP(false)
-		FFF_ReputationWatchBar_OnClick(self, button)		
+		FFF_ReputationWatchBar_OnClick(self, button)
 	else
 		self:SetAlwaysShowXP(not self.sets.alwaysShowXP)
 		self:OnEnter()
@@ -116,7 +131,7 @@ end
 
 function XP:OnLeave()
 	self:UpdateTextShown()
-	
+
 	if (FFF_ReputationWatchBar_OnLeave) then
 		FFF_ReputationWatchBar_OnLeave(self)
 	end
@@ -150,17 +165,17 @@ end
 --[[ Experience ]]--
 
 function XP:WatchExperience()
+	self.watchingXP = true
 	self:UnregisterAllEvents()
 	self:SetScript('OnEvent', self.OnXPEvent)
 
 	if not self.sets.alwaysShowXP then
 		self:RegisterEvent('UPDATE_FACTION')
 	end
-	self:RegisterEvent('PLAYER_ENTERING_WORLD')
-	self:RegisterEvent('PLAYER_XP_UPDATE')
 	self:RegisterEvent('UPDATE_EXHAUSTION')
+	self:RegisterEvent('PLAYER_XP_UPDATE')
 	self:RegisterEvent('PLAYER_LEVEL_UP')
-	self:RegisterEvent('PLAYER_UPDATE_RESTING')
+	self:RegisterEvent('PLAYER_LOGIN')
 
 	self.rest:SetStatusBarColor(0.25, 0.25, 1)
 	self.value:SetStatusBarColor(0.6, 0, 0.6)
@@ -177,29 +192,56 @@ function XP:OnXPEvent(event)
 end
 
 function XP:UpdateExperience()
-	local value = UnitXP('player')
-	local max = UnitXPMax('player')
-	local pct = math.floor((value / max) * 100 + 0.5)
-
-	self.value:SetMinMaxValues(0, max)
-	self.value:SetValue(value)
-
+	local xp, xpMax = UnitXP('player'), UnitXPMax('player')
+	local tnl = xpMax - xp
+	local pct = (xpMax > 0 and round((xp / xpMax) * 100)) or 0
 	local rest = GetXPExhaustion()
-	self.rest:SetMinMaxValues(0, max)
-	
-	if rest then
-		self.rest:SetValue(value + rest)
-		self.text:SetFormattedText(REST_FORMAT, comma_value(value), comma_value(max), comma_value(rest), pct)
+
+	--update statusbar
+	self.value:SetMinMaxValues(0, xpMax)
+	self.value:SetValue(xp)
+	self.rest:SetMinMaxValues(0, xpMax)
+
+	if rest and rest > 0 then
+		self.rest:SetValue(xp + rest)
 	else
 		self.rest:SetValue(0)
-		self.text:SetFormattedText(XP_FORMAT, comma_value(value), comma_value(max), pct)
+	end
+
+	--update statusbar text
+	textEnv.xp = xp
+	textEnv.xpMax = xpMax
+	textEnv.tnl = tnl
+	textEnv.pct = pct
+	textEnv.rest = rest
+
+	local getXPText = assert(loadstring(self:GetXPFormat(), "getXPText"))
+	setfenv(getXPText, textEnv)
+	self.text:SetText(getXPText())
+end
+
+function XP:SetXPFormat(fmt)
+	self.sets.xpFormat = fmt
+	if self.watchingXP then
+		self:UpdateExperience()
 	end
 end
+
+function XP:GetXPFormat()
+	return self.sets.xpFormat or [[
+		if rest and rest > 0 then
+			return format("%s / %s (+%s) [%s%%]", comma(xp), comma(xpMax), comma(rest), pct)
+		end
+		return format("%s / %s [%s%%]", comma(xp), comma(xpMax), pct)
+	]]
+end
+
 
 
 --[[ Reputation ]]--
 
 function XP:WatchReputation()
+	self.watchingXP = nil
 	self:UnregisterAllEvents()
 	self:RegisterEvent('UPDATE_FACTION')
 	self:SetScript('OnEvent', self.OnRepEvent)
@@ -278,8 +320,31 @@ function XP:UpdateReputation()
 	self.value:SetMinMaxValues(0, max)
 	self.value:SetValue(value)
 
-	local repLevel = _G['FACTION_STANDING_LABEL' .. reaction]
-	self.text:SetFormattedText(REP_FORMAT, name, comma_value(value), comma_value(max), repLevel)
+	--update statusbar text
+	textEnv.faction = name
+	textEnv.rep = value
+	textEnv.repMax = max
+	textEnv.tnl = max - value
+	textEnv.pct = round(value / max * 100)
+
+	textEnv.repLevel = _G['FACTION_STANDING_LABEL' .. reaction]
+
+	local getRepText = assert(loadstring(self:GetRepFormat(), "getRepText"))
+	setfenv(getRepText, textEnv)
+	self.text:SetText(getRepText())
+end
+
+function XP:SetRepFormat(fmt)
+	self.sets.repFormat = fmt
+	if not self.watchingXP then
+		self:UpdateReputation()
+	end
+end
+
+function XP:GetRepFormat()
+	return self.sets.repFormat or [[
+		return format('%s: %s / %s (%s)', faction, comma(rep), comma(repMax), repLevel)
+	]]
 end
 
 
@@ -300,18 +365,19 @@ end
 --if libsharedmedia is present, then use the user's selected texture
 function XP:UpdateTexture()
 	local LSM = LibStub('LibSharedMedia-3.0', true)
-	
+
 	local texture = (LSM and LSM:Fetch('statusbar', self.sets.texture)) or DEFAULT_STATUSBAR_TEXTURE
+
 	self.value:SetStatusBarTexture(texture)
-	if self.value:GetStatusBarTexture().SetHorizTile then
-		self.value:GetStatusBarTexture():SetHorizTile(false)
-	end
+	self.value:GetStatusBarTexture():SetHorizTile(true)
+
 	self.rest:SetStatusBarTexture(texture)
-	if self.rest:GetStatusBarTexture().SetHorizTile then
-		self.rest:GetStatusBarTexture():SetHorizTile(false)
-	end
+	self.rest:GetStatusBarTexture():SetHorizTile(true)
+
 	self.bg:SetTexture(texture)
+	self.bg:SetHorizTile(true)
 end
+
 
 function XP:SetAlwaysShowXP(enable)
 	self.sets.alwaysShowXP = enable
@@ -345,7 +411,9 @@ function XP:ToggleText(enable)
 end
 
 
---[[ Layout Panel ]]--
+--[[
+	Layout Panel
+--]]
 
 local function CreateWidthSlider(p)
 	local s = p:NewSlider(L.Width, 1, 100, 1)
@@ -387,10 +455,16 @@ local function AddLayoutPanel(menu)
 	local showText = p:NewCheckButton(L.AlwaysShowText)
 	showText:SetScript('OnClick', function(self) self:GetParent().owner:ToggleText(self:GetChecked()) end)
 	showText:SetScript('OnShow', function(self) self:SetChecked(self:GetParent().owner.sets.alwaysShowText) end)
+
+	local showXP = p:NewCheckButton(L.AlwaysShowXP)
+	showXP:SetScript('OnClick', function(self) self:GetParent().owner:SetAlwaysShowXP(self:GetChecked()) end)
+	showXP:SetScript('OnShow', function(self) self:SetChecked(self:GetParent().owner.sets.alwaysShowXP) end)
 end
 
 
---[[ Texture Picker ]]--
+--[[
+	Texture Picker
+--]]
 
 --yeah I know I'm bad in that I didn't capitialize some constants
 local NUM_ITEMS = 9
@@ -433,10 +507,10 @@ local function Panel_UpdateList(self)
 
 	local scroll = self.scroll
 	FauxScrollFrame_Update(scroll, #textures, #self.buttons, height + offset)
-	
+
 	for i,button in pairs(self.buttons) do
 		local index = i + scroll.offset
-	
+
 		if index <= #textures then
 			button:SetText(textures[index])
 			button.bg:SetTexture(SML:Fetch('statusbar', textures[index]))
@@ -453,7 +527,7 @@ local function AddTexturePanel(menu)
 	if not LSM then
 		return
 	end
-	
+
 	local p = menu:NewPanel(L.Texture)
 	p.UpdateList = Panel_UpdateList
 	p:SetScript('OnShow', function() p:UpdateList() end)
