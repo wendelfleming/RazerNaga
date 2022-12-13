@@ -108,7 +108,7 @@ function CastingBar:OnEvent(event, ...)
 	
 	local unit = self.unit
 	local spell = UnitCastingInfo(unit)
-	if event == 'UNIT_SPELLCAST_FAILED' or event == 'UNIT_SPELLCAST_INTERRUPTED' then
+	if event == 'UNIT_SPELLCAST_FAILED' or event == 'UNIT_SPELLCAST_INTERRUPTED' or event == "UNIT_SPELLCAST_CHANNEL_STOP" then
 		self.failed = true
 	elseif event == 'UNIT_SPELLCAST_START' or event == 'UNIT_SPELLCAST_CHANNEL_START' then
 		self.failed = nil
@@ -126,10 +126,8 @@ function CastingBar:OnUpdate(elapsed)
 		self.Time:SetFormattedText('%.1f', self.value)
 		self:AdjustWidth()
 	elseif self.value >= self.maxValue then
-		self:SetStatusBarColor(0.0, 1.0, 0.0)
-	else 
 		self:SetValue(self.maxValue)
-		self:HideSpark()
+		self:SetStatusBarColor(0.0, 1.0, 0.0)
 	end
 end
 
@@ -156,6 +154,11 @@ end
 function CastingBar:UpdateColor(spell)
 	if self.failed then
 		self:SetStatusBarColor(0.86, 0.08, 0.24)
+		self:SetValue(self.maxValue)
+		self:HideSpark()
+	elseif self.channeling then
+		self:SetStatusBarColor(0.0, 1.0, 0.0)
+		self:HideSpark()
 	elseif spell and IsHelpfulSpell(spell) then
 		self:SetStatusBarColor(0.31, 0.78, 0.47)
 	elseif spell and IsHarmfulSpell(spell) then
