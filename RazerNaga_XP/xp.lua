@@ -369,13 +369,13 @@ function XP:UpdateTexture()
 	local texture = (LSM and LSM:Fetch('statusbar', self.sets.texture)) or DEFAULT_STATUSBAR_TEXTURE
 
 	self.value:SetStatusBarTexture(texture)
-	self.value:GetStatusBarTexture():SetHorizTile(true)
+	self.value:GetStatusBarTexture():SetHorizTile(false)
 
 	self.rest:SetStatusBarTexture(texture)
-	self.rest:GetStatusBarTexture():SetHorizTile(true)
+	self.rest:GetStatusBarTexture():SetHorizTile(false)
 
 	self.bg:SetTexture(texture)
-	self.bg:SetHorizTile(true)
+	self.bg:SetHorizTile(false)
 end
 
 
