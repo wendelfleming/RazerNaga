@@ -128,6 +128,10 @@ function CastingBar:OnUpdate(elapsed)
 	elseif self.value >= self.maxValue then
 		self:SetValue(self.maxValue)
 		self:SetStatusBarColor(0.0, 1.0, 0.0)
+		self:HideSpark()
+	else
+		self:SetValue(self.maxValue)
+		self:HideSpark()
 	end
 end
 
@@ -154,8 +158,6 @@ end
 function CastingBar:UpdateColor(spell)
 	if self.failed then
 		self:SetStatusBarColor(0.86, 0.08, 0.24)
-		self:SetValue(self.maxValue)
-		self:HideSpark()
 	elseif self.channeling then
 		self:SetStatusBarColor(0.0, 1.0, 0.0)
 		self:HideSpark()
