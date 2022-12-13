@@ -13,6 +13,7 @@ local Config = Anansi.Config
 local AnansiOptions = RazerNaga.Panel:New('RazerAnansiOptions', nil, L.Anansi, L.AnansiDescription , [[Interface\Addons\RazerNaga\Icons\RazerNaga]])
 RazerNaga.AnansiOptions = AnansiOptions
 
+
 --[[ Buttons ]]--
 
 --toggle config mode

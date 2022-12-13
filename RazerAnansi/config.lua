@@ -121,6 +121,7 @@ function Config:GetTKeyColor(tKey)
 	return color.r, color.g, color.b, color.a
 end
 
+
 --[[ configure t-key notifications ]]--
 
 function Config:SetEnableTKeyNotifications(enable)
