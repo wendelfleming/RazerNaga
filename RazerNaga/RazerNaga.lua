@@ -273,7 +273,6 @@ function RazerNaga:HideBlizzard()
 		"MultiBar7",
 		"PossessActionBar",
 		"StanceBar",
-		"PetActionBar",
 		"StatusTrackingBarManager",
 		"MainMenuBarVehicleLeaveButton"
 	)
@@ -301,7 +300,6 @@ function RazerNaga:HideBlizzard()
 		"MultiBar6",
 		"MultiBar7",
 		"PossessActionBar",
-		"PetActionBar",
 		"StanceBar"
 	)
 
