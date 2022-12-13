@@ -454,6 +454,14 @@ function Frame:GetExpectedAlpha()
 	if self.focused then
 		return self:GetFrameAlpha()
 	end
+	
+	--if the frame is a tKey and the given tKey is presed then return the frame's normal opacity
+	local Anansi = RazerNaga:GetModule('Anansi', true)
+	if Anansi and Anansi.Config:AutoFadingTBars() and RazerNaga.BindingsLoader:IsAutoBindingEnabled(self) then
+		if Anansi:IsTKeyPressed(Anansi:GetFrameTKey(self)) then
+			return self:GetFrameAlpha()
+		end
+	end
 
 	--if there's a statealpha value for the frame, then use it
 	local stateAlpha = self:GetAttribute('state-alpha')
@@ -1055,14 +1063,111 @@ local function createBorder(self)
 	return f
 end
 
-function Frame:ShowHighlight()
-	local ht = self.ht
-	if not ht then
-		ht = createBorder(self)
-		self.ht = ht
-	end
+--[[ anansi specific border ]]--
 
+local function createAnansiBorder(self)
+	local BORDER_SIZE = 32
+	local OFFSET = 12
+
+	local f = CreateFrame('Frame', nil, self)
+	f:SetPoint('TOPLEFT', -OFFSET, OFFSET, self)
+	f:SetPoint('BOTTOMRIGHT', OFFSET, -OFFSET, self)
+
+
+	local tl = f:CreateTexture(nil, 'BACKGROUND')
+	tl:SetSize(BORDER_SIZE, BORDER_SIZE)
+	tl:SetPoint('TOPLEFT')
+	f.tl = tl
+
+	local tr = f:CreateTexture(nil, 'BACKGROUND')
+	tr:SetSize(BORDER_SIZE, BORDER_SIZE)
+	tr:SetPoint('TOPRIGHT')
+	f.tr = tr
+
+	local t = f:CreateTexture(nil, 'BACKGROUND')
+	t:SetPoint('LEFT', tl, 'RIGHT', 0, 1)
+	t:SetPoint('RIGHT', tr, 'LEFT', 0, 1)
+	t:SetHeight(BORDER_SIZE)
+	t:SetHorizTile(true)
+	f.t = t
+
+	local bl = f:CreateTexture(nil, 'BACKGROUND')
+	bl:SetSize(BORDER_SIZE, BORDER_SIZE)
+	bl:SetPoint('BOTTOMLEFT')
+	f.bl = bl
+
+	local br = f:CreateTexture(nil, 'BACKGROUND')
+	br:SetSize(BORDER_SIZE, BORDER_SIZE)
+	br:SetPoint('BOTTOMRIGHT')
+	f.br = br
+
+	local b = f:CreateTexture(nil, 'BACKGROUND')
+	b:SetPoint('LEFT', bl, 'RIGHT', 0, 0)
+	b:SetPoint('RIGHT', br, 'LEFT', 0, 0)
+	b:SetHeight(BORDER_SIZE)
+	b:SetHorizTile(true)
+	f.b = b
+
+	local l = f:CreateTexture(nil, 'BACKGROUND')
+	l:SetPoint('TOP', tl, 'BOTTOM', -4, 0)
+	l:SetPoint('BOTTOM', bl, 'TOP', -4, 0)
+	l:SetWidth(BORDER_SIZE)
+	l:SetVertTile(true)
+	f.l = l
+
+	local r = f:CreateTexture(nil, 'BACKGROUND')
+	r:SetPoint('TOP', tr, 'BOTTOM', 4, 0)
+	r:SetPoint('BOTTOM', br, 'TOP', 4, 0)
+	r:SetWidth(BORDER_SIZE)
+	r:SetVertTile(true)
+	f.r = r
+
+	local m = f:CreateTexture(nil, 'BACKGROUND')
+	m:SetPoint('TOP', t, 'BOTTOM')
+	m:SetPoint('BOTTOM', b, 'TOP')
+	m:SetPoint('LEFT', l, 'RIGHT', 0, 0)
+	m:SetPoint('RIGHT', r, 'LEFT', 0, 0)
+	m:SetHorizTile(true)
+	m:SetVertTile(true)
+	f.m = m
+
+	return f
+end
+
+function Frame:ShowHighlight()
+	if not self:ShowAnansiHighlight() then
+		local ht = self.ht
+		if not ht then
+			ht = createBorder(self)
+			self.ht = ht
+		end
+	end
 	self.ht:Show()
+end
+
+function Frame:ShowAnansiHighlight()
+	local Anansi = RazerNaga:GetModule('Anansi', true)
+	if not Anansi then return false end
+
+	local tKey = Anansi:GetFrameTKey(self)
+	if tKey then
+		local ht = self.ht
+		if not ht then
+			ht = createAnansiBorder(self)
+			self.ht = ht
+		end
+
+		ht.tl:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_topleft]]):format(tKey))
+		ht.tr:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_topright]]):format(tKey))
+		ht.t:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_top]]):format(tKey))
+		ht.bl:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_bottomleft]]):format(tKey))
+		ht.br:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_bottomright]]):format(tKey))
+		ht.b:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_bottom]]):format(tKey))
+		ht.l:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_left]]):format(tKey))
+		ht.r:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_right]]):format(tKey))
+		ht.m:SetTexture(([[Interface\AddOns\RazerAnansi\images\border\boxoutline_T%d_centre]]):format(tKey))
+	end
+	return true
 end
 
 function Frame:HideHighlight()

@@ -161,7 +161,22 @@ function RazerNaga:GetDefaults()
 			firstLoad = true,
 			autoBindKeys = false,
 			highlightModifiers = false,
-			bindingSet = 'Simple'
+			bindingSet = 'Simple',
+
+			--anansi settings
+			showTPanel = 'always',
+
+			tKeyNames = {
+				'T1',
+				'T2',
+				'T3',
+				'T4',
+				'T5',
+				'T6',
+				'T7'
+			},
+
+			enableTKeyNotifications = true,
 		}
 	}
 
