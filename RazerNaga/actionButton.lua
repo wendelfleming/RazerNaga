@@ -118,8 +118,7 @@ function ActionButtonMixin:Skin()
 		self.CheckedTexture:SetTexture([[Interface\Buttons\CheckButtonHilight]])
 		self.CheckedTexture:SetSize(44, 44)
 		self.CheckedTexture:SetBlendMode("ADD")
-		self.cooldown:ClearAllPoints()
-		self.cooldown:SetAllPoints()
+		self.cooldown:SetSize(44, 44)
 	end
 end
 
