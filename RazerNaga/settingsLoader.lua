@@ -132,8 +132,8 @@ function SettingsLoader:GetThreeByFour()
 				['padW'] = 1,
 				['point'] = 'BOTTOMRIGHT',
 				['spacing'] = 0,
-				['x'] = -287,
-				['y'] = 127,
+				['x'] = -280,
+				['y'] = 123,
 				['enableAutoBinding'] = true,
 				['autoBindingModifier'] = 'NONE'
 			}, -- [1]
@@ -148,8 +148,8 @@ function SettingsLoader:GetThreeByFour()
 				['padW'] = 1,
 				['point'] = 'BOTTOMRIGHT',
 				['spacing'] = 0,
-				['x'] = -113,
-				['y'] = 125,
+				['x'] = -111,
+				['y'] = 123,
 			}, -- [2]
 			{
 				["scale"] = 0.89,
@@ -193,8 +193,8 @@ function SettingsLoader:GetThreeByFour()
 				['padW'] = 1,
 				['point'] = 'BOTTOM',
 				['spacing'] = 0,
-				['x'] = 311,
-				['y'] = 59,
+				['x'] = 303,
+				['y'] = 57,
 			}, -- [5]
 			{
 				["scale"] = 0.89,
@@ -208,8 +208,8 @@ function SettingsLoader:GetThreeByFour()
 				['padW'] = 1,
 				['point'] = 'BOTTOM',
 				['spacing'] = 0,
-				['x'] = -311,
-				['y'] = 59,
+				['x'] = -303,
+				['y'] = 57,
 			}, -- [6]
 			{
 				["scale"] = 0.89,
@@ -223,8 +223,8 @@ function SettingsLoader:GetThreeByFour()
 				['padW'] = 1,
 				['point'] = 'RIGHT',
 				['spacing'] = 0,
-				['x'] = -287,
-				['y'] = -177,
+				['x'] = -279,
+				['y'] = -175,
 			}, -- [7]
 			{
 				["scale"] = 0.89,
@@ -238,8 +238,8 @@ function SettingsLoader:GetThreeByFour()
 				['padW'] = 1,
 				['point'] = 'RIGHT',
 				['spacing'] = 0,
-				['x'] = -115,
-				['y'] = -179,
+				['x'] = -113,
+				['y'] = -175,
 			}, -- [8]
 			{
 				["scale"] = 0.89,
@@ -253,8 +253,8 @@ function SettingsLoader:GetThreeByFour()
 				['padW'] = 1,
 				['point'] = 'RIGHT',
 				['spacing'] = 0,
-				['x'] = -287,
-				['y'] = 46,
+				['x'] = -279,
+				['y'] = 44,
 			}, -- [9]
 			{
 				["scale"] = 0.89,
@@ -268,8 +268,8 @@ function SettingsLoader:GetThreeByFour()
 				['padW'] = 1,
 				['point'] = 'RIGHT',
 				['spacing'] = 0,
-				['x'] = -115,
-				['y'] = 46,
+				['x'] = -113,
+				['y'] = 44,
 			}, -- [10]
 			['cast'] = {
 				['anchor'] = false,
