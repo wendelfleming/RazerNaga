@@ -159,7 +159,6 @@ function CastingBar:UpdateColor(spell)
 	if self.failed then
 		self:SetStatusBarColor(0.86, 0.08, 0.24)
 	elseif self.channeling then
-		self:SetStatusBarColor(0.0, 1.0, 0.0)
 		self:HideSpark()
 	elseif spell and IsHelpfulSpell(spell) then
 		self:SetStatusBarColor(0.31, 0.78, 0.47)
