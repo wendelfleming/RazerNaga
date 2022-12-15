@@ -118,7 +118,9 @@ function ActionButtonMixin:Skin()
 		self.CheckedTexture:SetTexture([[Interface\Buttons\CheckButtonHilight]])
 		self.CheckedTexture:SetSize(44, 44)
 		self.CheckedTexture:SetBlendMode("ADD")
-		self.cooldown:SetSize(44, 44)
+		self.cooldown:ClearAllPoints()
+		self.cooldown:SetPoint("TOPLEFT", self.icon, "TOPLEFT", 2, -2)
+		self.cooldown:SetPoint("BOTTOMRIGHT", self.icon, "BOTTOMRIGHT", -2, 2)
 	end
 end
 
