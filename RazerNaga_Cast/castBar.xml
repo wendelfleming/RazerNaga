@@ -46,12 +46,10 @@
 						<Anchor point="CENTER"/>
 					</Anchors>
 				</Texture>
-				<Texture parentKey="Spark" file="Interface\CastingBar\UI-CastingBar-Spark" alphaMode="ADD">
-					<Size x="5" y="20"/>
+				<Texture parentKey="Spark" atlas="ui-castingbar-pip">
+					<Size x="8" y="20"/>
 					<Anchors>
-						<Anchor point="CENTER">
-							<Offset x="0" y="-4"/>
-						</Anchor>
+						<Anchor point="CENTER" x="0" y="0"/>
 					</Anchors>
 				</Texture>
 				<Texture parentKey="Flash" file="Interface\CastingBar\UI-CastingBar-Flash-Small" alphaMode="ADD">
