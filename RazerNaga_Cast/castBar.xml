@@ -46,10 +46,12 @@
 						<Anchor point="CENTER"/>
 					</Anchors>
 				</Texture>
-				<Texture parentKey="Spark" atlas="ui-castingbar-pip">
+				<Texture parentKey="Spark" file="Interface\CastingBar\UI-CastingBar-Spark" alphaMode="ADD">
 					<Size x="8" y="20"/>
 					<Anchors>
-						<Anchor point="CENTER" x="0" y="0"/>
+						<Anchor point="CENTER">
+							<Offset x="0" y="-4"/>
+						</Anchor>
 					</Anchors>
 				</Texture>
 				<Texture parentKey="Flash" file="Interface\CastingBar\UI-CastingBar-Flash-Small" alphaMode="ADD">
@@ -60,6 +62,15 @@
 				</Texture>
 			</Layer>
 		</Layers>
+		
+		<Animations>
+			<AnimationGroup parentKey="FadeOutAnim" setToFinalAlpha="true">
+				<Alpha fromAlpha="1" toAlpha="0" duration="0.1" startDelay="0.1"/>
+				<Scripts>
+					<OnFinished function="CastingBarAnim_OnFadeOutFinish"/>
+				</Scripts>
+			</AnimationGroup>
+		</Animations>
 
 		<Scripts>
 			<OnLoad>
