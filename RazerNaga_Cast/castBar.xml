@@ -47,7 +47,7 @@
 					</Anchors>
 				</Texture>
 				<Texture parentKey="Spark" file="Interface\CastingBar\UI-CastingBar-Spark" alphaMode="ADD">
-					<Size x="8" y="20"/>
+					<Size x="5" y="20"/>
 					<Anchors>
 						<Anchor point="CENTER">
 							<Offset x="0" y="-4"/>
