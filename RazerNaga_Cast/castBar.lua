@@ -158,7 +158,7 @@ end
 
 function CastingBar:UpdateColor(spell)
 	if self.failed then
-		self:SetStatusBarColor(0.86, 0.08, 0.24)	
+		self:SetStatusBarColor(0.86, 0.08, 0.24)
 	elseif spell and IsHelpfulSpell(spell) then
 		self:SetStatusBarColor(0.31, 0.78, 0.47)
 	elseif spell and IsHarmfulSpell(spell) then
